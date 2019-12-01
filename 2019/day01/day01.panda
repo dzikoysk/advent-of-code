@@ -5,65 +5,30 @@ require java:collections
 import java.io.File
 import java.nio.file.Files
 
-class Mass {
+main {
+    String input = "./2019/day01/day01.input"
+    List lines = Files.readAllLines(new File(input).toPath())
 
-    local Int calculateFuelFromMass(Int mass) {
-        return mass / 3 - 2
-    }
+    mut Int fuelSum = 0
+    mut Int totalSum = 0
 
-}
+    foreach(String line : lines) {
+        mut Int parsed = Int.parseInt(line)
+        mut Int totalFuel = 0
 
-class Day01 {
+        fuelSum = fuelSum + parsed / 3 - 2
 
-    local Int partOne(String input) {
-        List lines = Files.readAllLines(new File(input).toPath())
-        Mass mass = new Mass()
+        parsed = parsed / 3 - 2
 
-        mut Int total = 0
+         while parsed > 0 {
+            totalFuel = totalFuel + parsed
 
-        foreach(String line : lines) {
-            Int parsed = Int.parseInt(line)
-            Int fuel = mass.calculateFuelFromMass(parsed)
-
-            total = total + fuel
+            parsed = parsed / 3 - 2
         }
 
-        return total
+        totalSum = totalSum + totalFuel
     }
 
-    local Int partTwo(String input) {
-    	List lines = Files.readAllLines(new File(input).toPath())
-		Mass mass = new Mass()
-    	mut Int total = 0
-
-    	foreach(String line : lines) {
-    		mut Int parsed = Int.parseInt(line)
-    		mut Int totalFuel = 0
-
-    		parsed = parsed / 3 - 2
-
-    		while parsed > 0 {
-    			totalFuel = totalFuel + parsed
-
-    			parsed = mass.calculateFuelFromMass(parsed)
-    		}
-
-    		total = total + totalFuel
-    	}
-
-    	return total;
-    }
-
-    local Int calculateFuelFromMass(Int mass) {
-        return mass / 3 - 2
-    }
-
-
-}
-
-main {
-    Day01 day01 = new Day01()
-
-    log "Part one answer: " + day01.partOne("./2019/day01/day01.input")
-    log "Part two answer: " + day01.partTwo("./2019/day01/day01.input")
+    log "Part one answer: " + fuelSum
+    log "Part two answer: " + totalSum
 }
