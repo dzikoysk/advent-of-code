@@ -6,7 +6,7 @@ import java.io.File
 import java.nio.file.Files
 
 main {
-    List lines = Files.readAllLines(new File("./2019/day01/day01.input").toPath())
+    List lines = Files.readAllLines(new File("./2019/day01/input/dzikoysk.input").toPath())
     
     mut Int fuelSum = 0
     mut Int totalSum = 0
