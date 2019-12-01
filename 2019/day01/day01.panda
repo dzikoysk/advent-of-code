@@ -6,23 +6,20 @@ import java.io.File
 import java.nio.file.Files
 
 main {
-    String input = "./2019/day01/day01.input"
-    List lines = Files.readAllLines(new File(input).toPath())
-
+    List lines = Files.readAllLines(new File("./2019/day01/day01.input").toPath())
+    
     mut Int fuelSum = 0
     mut Int totalSum = 0
 
-    foreach(String line : lines) {
-        mut Int parsed = Int.parseInt(line)
+    foreach (String line : lines) {
+        mut Int parsed = Int.parseInt(line)        
         mut Int totalFuel = 0
 
         fuelSum = fuelSum + parsed / 3 - 2
-
         parsed = parsed / 3 - 2
 
-         while parsed > 0 {
+        while parsed > 0 {
             totalFuel = totalFuel + parsed
-
             parsed = parsed / 3 - 2
         }
 
