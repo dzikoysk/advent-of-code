@@ -1,5 +1,11 @@
 module day01
 
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+
 main {
-    log 'hello panda'
+    List lines = Files.readAllLines(new File("./2019/day01/day01.input").toPath())
+    log 'hello panda' + lines
 }
