@@ -7,5 +7,14 @@ import java.nio.file.Files
 
 main {
     List lines = Files.readAllLines(new File("./2019/day01/day01.input").toPath())
-    log 'hello panda' + lines
+
+    mut Int total = 0
+
+    foreach(String line : lines) {
+    	mut Int parsedNumber = Int.parseInt(line)
+   		total = total + (parsedNumber / 3 - 2)
+    }
+   
+
+    log total
 }
