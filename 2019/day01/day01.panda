@@ -5,16 +5,40 @@ require java:collections
 import java.io.File
 import java.nio.file.Files
 
-main {
-    List lines = Files.readAllLines(new File("./2019/day01/day01.input").toPath())
+class Mass {
 
-    mut Int total = 0
-
-    foreach(String line : lines) {
-    	mut Int parsedNumber = Int.parseInt(line)
-   		total = total + (parsedNumber / 3 - 2)
+    local Int calculateFuelFromMass(Int mass) {
+        return mass / 3 - 2
     }
-   
 
-    log total
+}
+
+class Day01 {
+
+    local Int partOne(String input) {
+        List lines = Files.readAllLines(new File(input).toPath())
+        Mass mass = new Mass()
+
+        mut Int total = 0
+
+        foreach(String line : lines) {
+            Int parsed = Int.parseInt(line)
+            Int fuel = mass.calculateFuelFromMass(parsed)
+
+            total = total + fuel
+        }
+
+        return total
+    }
+
+    local Int calculateFuelFromMass(Int mass) {
+        return mass / 3 - 2
+    }
+
+}
+
+main {
+    Day01 day01 = new Day01()
+
+    log day01.partOne("./2019/day01/day01.input")
 }
