@@ -31,14 +31,39 @@ class Day01 {
         return total
     }
 
+    local Int partTwo(String input) {
+    	List lines = Files.readAllLines(new File(input).toPath())
+		Mass mass = new Mass()
+    	mut Int total = 0
+
+    	foreach(String line : lines) {
+    		mut Int parsed = Int.parseInt(line)
+    		mut Int totalFuel = 0
+
+    		parsed = parsed / 3 - 2
+
+    		while parsed > 0 {
+    			totalFuel = totalFuel + parsed
+
+    			parsed = mass.calculateFuelFromMass(parsed)
+    		}
+
+    		total = total + totalFuel
+    	}
+
+    	return total;
+    }
+
     local Int calculateFuelFromMass(Int mass) {
         return mass / 3 - 2
     }
+
 
 }
 
 main {
     Day01 day01 = new Day01()
 
-    log day01.partOne("./2019/day01/day01.input")
+    log "Part one answer: " + day01.partOne("./2019/day01/day01.input")
+    log "Part two answer: " + day01.partTwo("./2019/day01/day01.input")
 }
