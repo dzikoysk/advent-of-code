@@ -3,5 +3,5 @@
 
 #### Run
 ```bash
-./run.sh day01 dzikoysk
+./run.sh <day> <user>
 ```
