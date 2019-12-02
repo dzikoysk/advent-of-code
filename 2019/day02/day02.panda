@@ -1,0 +1,10 @@
+module day02
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+
+main {
+    log String content = Files.readAllLines(new File("./2019/day02/input/dzikoysk.input").toPath()).get(0) as String
+}
