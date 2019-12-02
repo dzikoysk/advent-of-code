@@ -6,5 +6,55 @@ import java.io.File
 import java.nio.file.Files
 
 main {
-    log String content = Files.readAllLines(new File("./2019/day02/input/dzikoysk.input").toPath()).get(0) as String
+    String content = Files.readAllLines(new File("./2019/day02/input/oskarr1239.input").toPath()).get(0) as String
+	String[] split = content.split(",")
+	
+	Int[] intCodes = new Int[split.size()]
+	
+	for(mut Int point = 0; point < split.size(); point++) {
+		intCodes[point] = Int.parseInt(split[point])
+	}
+	
+	log "Part one answer: " + Executor.execute(12, 2, intCodes)
+
+	for(mut Int x = 0; x < 99; x++) {
+		for(mut Int y = 0; y < 99; y++) {
+			Int output = Executor.execute(x, y, intCodes)
+			
+			if output == 19690720 {
+				log "Part two answer: " + (100 * x + y)
+				return
+			}
+		}
+	}
+}
+
+class Executor {
+	local static Int execute(Int firstPoint, Int secondPoint, Int[] codes) {
+	
+		Int[] intCodes = Arrays.copyOf(codes, codes.size()) as Int[]
+	
+		intCodes[1] = firstPoint
+		intCodes[2] = secondPoint
+		
+		mut Int pointer = 0
+	
+		while pointer < intCodes.size() {
+			
+			if intCodes[pointer] == 1 {
+				intCodes[intCodes[pointer + 3]] = intCodes[intCodes[pointer + 1]] + intCodes[intCodes[pointer + 2]]
+				pointer = pointer + 4
+				continue
+			} 
+			if intCodes[pointer] == 2 {
+				intCodes[intCodes[pointer + 3]] = intCodes[intCodes[pointer + 1]] * intCodes[intCodes[pointer + 2]]
+				pointer = pointer + 4
+				continue
+			} 
+			if intCodes[pointer] == 99 {
+				return intCodes[0]
+			}
+			
+		}
+	}
 }
