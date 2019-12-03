@@ -7,4 +7,5 @@ import java.nio.file.Files
 
 main {
     log String content = Files.readAllLines(new File(System.getProperty("input")).toPath()).get(0) as String
+    Int[][] array = new Int[1000][1000]
 }
