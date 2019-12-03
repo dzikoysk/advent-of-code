@@ -1,0 +1,10 @@
+module day03
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+
+main {
+    log String content = Files.readAllLines(new File(System.getProperty("input")).toPath()).get(0) as String
+}
