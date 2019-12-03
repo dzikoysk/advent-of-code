@@ -16,7 +16,7 @@ main {
      */
 
     Map firstMap = new HashMap()
-    mut MovingPoint lastPoint = new MovingPoint(0, 0)
+    mut MovingPoint lastPoint = new MovingPoint(0, 0, 0)
 
     foreach (String move : first) {
         lastPoint = lastPoint.movePoint(firstMap, move)
@@ -27,7 +27,7 @@ main {
      */
 
     Map secondMap = new HashMap()
-    lastPoint = new MovingPoint(0, 0)
+    lastPoint = new MovingPoint(0, 0, 0)
 
     foreach (String move : second) {
        lastPoint = lastPoint.movePoint(secondMap, move)
@@ -46,9 +46,11 @@ main {
             continue
         }
 
-        foreach (Int firstY : firstEntry.getValue() as List) {
-            if secondY.contains(firstY) {
-                crossPoints.add(new MovingPoint(firstEntry.getKey() as Int, firstY))
+        foreach (MovingPoint firstPoint : firstEntry.getValue() as List) {
+            foreach (MovingPoint secondPoint : secondY) {
+                if firstPoint.x == secondPoint.x && firstPoint.y == secondPoint.y {
+                    crossPoints.add(new MovingPoint(firstPoint.x, firstPoint.y, firstPoint.fullSteps + secondPoint.fullSteps))
+                }
             }
         }
     }
@@ -67,7 +69,21 @@ main {
         }
     }
 
-    log manhattanDistance
+    log 'Manhattan distance: ' + manhattanDistance
+
+    /*
+     * Select the fewest combination
+     */
+
+     mut Int fewestCombination = Int.MAX_VALUE
+
+     foreach (MovingPoint points : crossPoints) {
+        if (points.fullSteps < fewestCombination) {
+            fewestCombination = points.fullSteps
+        }
+     }
+
+     log 'Fewest combination: ' + fewestCombination
 }
 
 /*
@@ -77,10 +93,12 @@ local class MovingPoint {
 
     local Int x
     local Int y
+    local Int fullSteps
 
-    constructor(Int xValue, Int yValue) {
+    constructor(Int xValue, Int yValue, Int stepsValue) {
         this.x = xValue
         this.y = yValue
+        this.fullSteps = stepsValue
     }
 
     local MovingPoint movePoint(Map map, String move) {
@@ -89,31 +107,31 @@ local class MovingPoint {
 
         if direction == 'U' {
             for (mut Int i = 1; i <= steps; i++ ) {
-                put(map, x, y + i)
+                put(map, x, y + i, fullSteps + i)
             }
-            return new MovingPoint(x, y + steps)
+            return new MovingPoint(x, y + steps, fullSteps + steps)
         }
         else if direction == 'D' {
             for (mut Int i = 1; i <= steps; i++ ) {
-                put(map, x, y - i)
+                put(map, x, y - i, fullSteps + i)
             }
-            return new MovingPoint(x, y - steps)
+            return new MovingPoint(x, y - steps, fullSteps + steps)
         }
         else if direction == 'L' {
             for (mut Int i = 1; i <= steps; i++ ) {
-                put(map, x - i, y)
+                put(map, x - i, y, fullSteps + i)
             }
-            return new MovingPoint(x - steps, y)
+            return new MovingPoint(x - steps, y, fullSteps + steps)
         }
         else if direction == 'R' {
             for (mut Int i = 1; i <= steps; i++ ) {
-                put(map, x + i, y)
+                put(map, x + i, y, fullSteps + i)
             }
-            return new MovingPoint(x + steps, y)
+            return new MovingPoint(x + steps, y, fullSteps + steps)
         }
     }
 
-    local static put(Map map, Int x, Int y) {
+    local static put(Map map, Int x, Int y, Int fullSteps) {
         mut nil List list = map.get(x) as List
 
         if list == null {
@@ -121,7 +139,7 @@ local class MovingPoint {
             map.put(x, list)
         }
 
-        list.add(y)
+        list.add(new MovingPoint(x, y, fullSteps))
     }
 
 }
