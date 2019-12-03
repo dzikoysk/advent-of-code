@@ -4,8 +4,124 @@ require java:collections
 
 import java.io.File
 import java.nio.file.Files
+import java.lang.Math
 
 main {
-    log String content = Files.readAllLines(new File(System.getProperty("input")).toPath()).get(0) as String
-    Int[][] array = new Int[1000][1000]
+    List wires = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    String[] first = (wires.get(0) as String).split(",")
+    String[] second = (wires.get(1) as String).split(",")
+
+    /*
+     * Map first wire into <X, List<Y>> the first map using the moving point
+     */
+
+    Map firstMap = new HashMap()
+    mut MovingPoint lastPoint = new MovingPoint(0, 0)
+
+    foreach (String move : first) {
+        lastPoint = lastPoint.movePoint(firstMap, move)
+    }
+
+    /*
+     * Map second wire into <X, List<Y>> the second map using the moving point
+     */
+
+    Map secondMap = new HashMap()
+    lastPoint = new MovingPoint(0, 0)
+
+    foreach (String move : second) {
+       lastPoint = lastPoint.movePoint(secondMap, move)
+    }
+
+    /*
+     * Search for the crossing points
+     */
+
+    List crossPoints = new ArrayList()
+
+    foreach (Entry firstEntry : firstMap.entrySet()) {
+        nil List secondY = secondMap.get(firstEntry.getKey()) as List
+
+        if secondY == null {
+            continue
+        }
+
+        foreach (Int firstY : firstEntry.getValue() as List) {
+            if secondY.contains(firstY) {
+                crossPoints.add(new MovingPoint(firstEntry.getKey() as Int, firstY))
+            }
+        }
+    }
+
+    /*
+     * Select the nearest point
+     */
+
+    mut Int manhattanDistance = Int.MAX_VALUE
+
+    foreach (MovingPoint point : crossPoints) {
+        Int currentDistance = Math.abs(point.x) + Math.abs(point.y)
+
+        if currentDistance < manhattanDistance {
+            manhattanDistance = currentDistance
+        }
+    }
+
+    log manhattanDistance
+}
+
+/*
+ * Cancerous class
+ */
+local class MovingPoint {
+
+    local Int x
+    local Int y
+
+    constructor(Int xValue, Int yValue) {
+        this.x = xValue
+        this.y = yValue
+    }
+
+    local MovingPoint movePoint(Map map, String move) {
+        String direction = move.substring(0, 1)
+        Int steps = Int.parseInt(move.substring(1))
+
+        if direction == 'U' {
+            for (mut Int i = 1; i <= steps; i++ ) {
+                put(map, x, y + i)
+            }
+            return new MovingPoint(x, y + steps)
+        }
+        else if direction == 'D' {
+            for (mut Int i = 1; i <= steps; i++ ) {
+                put(map, x, y - i)
+            }
+            return new MovingPoint(x, y - steps)
+        }
+        else if direction == 'L' {
+            for (mut Int i = 1; i <= steps; i++ ) {
+                put(map, x - i, y)
+            }
+            return new MovingPoint(x - steps, y)
+        }
+        else if direction == 'R' {
+            for (mut Int i = 1; i <= steps; i++ ) {
+                put(map, x + i, y)
+            }
+            return new MovingPoint(x + steps, y)
+        }
+    }
+
+    local static put(Map map, Int x, Int y) {
+        mut nil List list = map.get(x) as List
+
+        if list == null {
+            list = new ArrayList()
+            map.put(x, list)
+        }
+
+        list.add(y)
+    }
+
 }
