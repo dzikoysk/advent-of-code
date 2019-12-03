@@ -40,14 +40,14 @@ main {
     List crossPoints = new ArrayList()
 
     foreach (Entry firstEntry : firstMap.entrySet()) {
-        nil List secondY = secondMap.get(firstEntry.getKey()) as List
+        nil List secondValues = secondMap.get(firstEntry.getKey()) as List
 
-        if secondY == null {
+        if secondValues == null {
             continue
         }
 
         foreach (MovingPoint firstPoint : firstEntry.getValue() as List) {
-            foreach (MovingPoint secondPoint : secondY) {
+            foreach (MovingPoint secondPoint : secondValues) {
                 if firstPoint.x == secondPoint.x && firstPoint.y == secondPoint.y {
                     crossPoints.add(new MovingPoint(firstPoint.x, firstPoint.y, firstPoint.fullSteps + secondPoint.fullSteps))
                 }
