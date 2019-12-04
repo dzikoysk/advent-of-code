@@ -1,0 +1,12 @@
+module day03
+
+require java:collections
+
+import java.io.File
+import org.panda_lang.utilities.commons.FileUtils
+
+main {
+    String[] range = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split("-")
+    Int minimum = Int.parseInt(range[0])
+    Int maximum = Int.parseInt(range[1])
+}
