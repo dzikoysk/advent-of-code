@@ -1,12 +1,38 @@
-module day03
+module day04
 
 require java:collections
 
 import java.io.File
+import java.util.Arrays
 import org.panda_lang.utilities.commons.FileUtils
 
 main {
     String[] range = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split("-")
     Int minimum = Int.parseInt(range[0])
     Int maximum = Int.parseInt(range[1])
+    mut Int count = 0
+
+    for (mut Int int = minimum; int < maximum; int++) {
+        String value = int.toString()
+        PrimitiveChar[] chars = value.toCharArray()
+        Arrays.sort(chars)
+        String sorted = new String(chars)
+
+        if sorted != value {
+            continue
+        }
+
+        mut nil PrimitiveChar previous = null
+
+        foreach (PrimitiveChar char : chars) {
+            if previous == char {
+                count++
+                break
+            }
+
+            previous = char
+        }
+    }
+
+    log 'Count: ' + count
 }
