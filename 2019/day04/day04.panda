@@ -10,29 +10,59 @@ main {
     String[] range = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split("-")
     Int minimum = Int.parseInt(range[0])
     Int maximum = Int.parseInt(range[1])
+
     mut Int count = 0
+    mut Int elfCount = 0
 
     for (mut Int int = minimum; int < maximum; int++) {
         String value = int.toString()
-        PrimitiveChar[] chars = value.toCharArray()
-        Arrays.sort(chars)
-        String sorted = new String(chars)
+        PrimitiveChar[] numbers = value.toCharArray()
+        Arrays.sort(numbers)
+        String sorted = new String(numbers)
 
         if sorted != value {
             continue
         }
 
-        mut nil PrimitiveChar previous = null
+        Map chars = new HashMap()
 
-        foreach (PrimitiveChar char : chars) {
-            if previous == char {
-                count++
-                break
+        foreach (PrimitiveChar char : numbers) {
+            mut nil Int amount = chars.get(char) as Int
+
+            if amount == null {
+                amount = 1
+            }
+            else {
+                amount = amount + 1
             }
 
-            previous = char
+            chars.put(char, amount)
+        }
+
+        mut Bool default = false
+        mut Bool elf = false
+
+        foreach (Entry entry : chars.entrySet()) {
+            Int amount = entry.getValue() as Int
+
+            if amount > 1 {
+                default = true
+            }
+
+            if amount == 2 {
+                elf = true
+            }
+        }
+
+        if default {
+            count++
+        }
+
+        if elf {
+            elfCount++
         }
     }
 
     log 'Count: ' + count
+    log 'Elf count: ' + elfCount
 }
