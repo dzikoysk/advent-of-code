@@ -4,6 +4,7 @@ require java:collections
 
 import java.io.File
 import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
 
 main {
     String[] content = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(",")
@@ -14,57 +15,86 @@ main {
     }
 
     VM vm = new VM()
-    log vm.launch(intCodes, 0)
+    log 'The program produced ' + vm.launch(intCodes, 1) + ' code'
 }
 
 local class VM {
 
-    local Int launch(Int[] instructions, Int mode) {
+    local Int launch(Int[] instructions, Int id) {
         Int[] process = Arrays.copyOf(instructions, instructions.size()) as Int[]
-        return execute(process, mode)
+        return execute(process, id)
     }
 
-    local Int getValue(Int[] process, Int address) {
-        return process[process[address]]
-    }
-
-    local Int execute(Int[] process, Int mode) {
+    local Int execute(Int[] process, Int id) {
         mut Int pointer = 0
-        mut Int output = 0-1
+        mut Int output = 0
 
         while pointer < process.size() {
-            Int opcode = process[pointer]
+            Int parameter = process[pointer]
+            String fixedParameter = StringUtils.buildSpace(5 - parameter.toString().length()).replace(' ', '0') + parameter.toString()
+            Int opcode = Int.parseInt(fixedParameter.substring(3).toString())
+
+            // Opcode 99: Exit
+            if opcode == 99 {
+                return output
+            }
+
+            Bool modeA = fixedParameter.charAt(0).toString() == '1'
+            Bool modeB = fixedParameter.charAt(1).toString() == '1'
+            Bool modeC = fixedParameter.charAt(2).toString() == '1'
+
+            // Opcode 3: Input
+            if opcode == 3 {
+                VM.set(process, false, pointer + 1, id)
+                pointer = pointer + 2
+                continue
+            }
+
+            Int valueA = VM.select(process, modeC, pointer + 1)
+
+            // Opcode 4: Output
+            if opcode == 4 {
+                log 'TEST >> ' + (output = valueA)
+                pointer = pointer + 2
+                continue
+            }
+
+            Int valueB = VM.select(process, modeB, pointer + 2)
 
             // Opcode 1: Add
             if opcode == 1 {
-                process[process[pointer + 3]] = process[process[pointer + 1]] + process[process[pointer + 2]]
+                VM.set(process, false, pointer + 3, valueA + valueB)
                 pointer = pointer + 4
             }
             // Opcode 2: Multiply
             else if opcode == 2 {
-                process[process[pointer + 3]] = process[process[pointer + 1]] * process[process[pointer + 2]]
+                VM.set(process, false, pointer + 3, valueA * valueB)
                 pointer = pointer + 4
             }
-            // Opcode 3: Input
-            else if opcode == 3 {
-                process[process[pointer + 1]] = mode
-                pointer = pointer + 2
-            }
-            // Opcode 4: Output
-            else if opcode == 4 {
-                output = process[process[pointer + 1]]
-                pointer = pointer + 2
-            }
-            // Opcode 99: Exit
-            else if opcode == 99 {
-                return output
-            }
             else {
-                throw new RuntimeException(opcode.toString())
+                throw new RuntimeException("Unknown opcode " + opcode.toString())
             }
         }
 
         throw new RuntimeException("Program could not exit")
+    }
+
+    local static Int set(Int[] process, Bool mode, Int address, Int value) {
+        if (mode) {
+            process[address] = value
+        }
+        else {
+            process[process[address]] = value
+        }
+    }
+
+    local static Int select(Int[] process, Bool mode, Int address) {
+        if (mode) {
+            return process[address]
+        }
+        else {
+            return process[process[address]]
+        }
     }
 
 }
