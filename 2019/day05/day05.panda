@@ -1,0 +1,10 @@
+module day05
+
+require java:collections
+
+import java.io.File
+import org.panda_lang.utilities.commons.FileUtils
+
+main {
+    log String[] instructions = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(",")
+}
