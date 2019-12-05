@@ -16,6 +16,7 @@ main {
 
     VM vm = new VM()
     log 'The program produced ' + vm.launch(intCodes, 1) + ' code'
+    log 'Diagnostic code for system ID 5 is ' + vm.launch(intCodes, 5)
 }
 
 local class VM {
@@ -42,6 +43,7 @@ local class VM {
             Bool modeA = fixedParameter.charAt(0).toString() == '1'
             Bool modeB = fixedParameter.charAt(1).toString() == '1'
             Bool modeC = fixedParameter.charAt(2).toString() == '1'
+            Int valueA = VM.select(process, modeC, pointer + 1)
 
             // Opcode 3: Input
             if opcode == 3 {
@@ -49,11 +51,8 @@ local class VM {
                 pointer = pointer + 2
                 continue
             }
-
-            Int valueA = VM.select(process, modeC, pointer + 1)
-
             // Opcode 4: Output
-            if opcode == 4 {
+            else if opcode == 4 {
                 log 'TEST >> ' + (output = valueA)
                 pointer = pointer + 2
                 continue
@@ -65,10 +64,55 @@ local class VM {
             if opcode == 1 {
                 VM.set(process, false, pointer + 3, valueA + valueB)
                 pointer = pointer + 4
+                continue
             }
             // Opcode 2: Multiply
             else if opcode == 2 {
                 VM.set(process, false, pointer + 3, valueA * valueB)
+                pointer = pointer + 4
+                continue
+            }
+            // Opcode 5: Jump if true
+            else if opcode == 5 {
+                if valueA > 0 {
+                    pointer = valueB
+                }
+                else {
+                    pointer = pointer + 3
+                }
+                continue
+            }
+            // Opcode 6: Jump if false
+            else if opcode == 6 {
+                if valueA == 0 {
+                    pointer = valueB
+                }
+                else {
+                    pointer = pointer + 3
+                }
+                continue
+            }
+
+            Int valueC = VM.select(process, modeA, pointer + 3)
+
+            // Opcode 7: Less than
+            if opcode == 7 {
+                if valueA < valueB {
+                    VM.set(process, false, pointer + 3, 1)
+                }
+                else {
+                    VM.set(process, false, pointer + 3, 0)
+                }
+                pointer = pointer + 4
+            }
+            // Opcode 8: Equals
+            else if opcode == 8 {
+                if valueA == valueB {
+                    VM.set(process, false, pointer + 3, 1)
+                }
+                else {
+                    VM.set(process, false, pointer + 3, 0)
+                }
                 pointer = pointer + 4
             }
             else {
