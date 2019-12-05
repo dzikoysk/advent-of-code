@@ -6,5 +6,65 @@ import java.io.File
 import org.panda_lang.utilities.commons.FileUtils
 
 main {
-    log String[] instructions = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(",")
+    String[] content = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(",")
+    Int[] intCodes = new Int[content.size()]
+
+    for (mut Int point = 0; point < content.size(); point++) {
+        intCodes[point] = Int.parseInt(content[point])
+    }
+
+    VM vm = new VM()
+    log vm.launch(intCodes, 0)
+}
+
+local class VM {
+
+    local Int launch(Int[] instructions, Int mode) {
+        Int[] process = Arrays.copyOf(instructions, instructions.size()) as Int[]
+        return execute(process, mode)
+    }
+
+    local Int getValue(Int[] process, Int address) {
+        return process[process[address]]
+    }
+
+    local Int execute(Int[] process, Int mode) {
+        mut Int pointer = 0
+        mut Int output = 0-1
+
+        while pointer < process.size() {
+            Int opcode = process[pointer]
+
+            // Opcode 1: Add
+            if opcode == 1 {
+                process[process[pointer + 3]] = process[process[pointer + 1]] + process[process[pointer + 2]]
+                pointer = pointer + 4
+            }
+            // Opcode 2: Multiply
+            else if opcode == 2 {
+                process[process[pointer + 3]] = process[process[pointer + 1]] * process[process[pointer + 2]]
+                pointer = pointer + 4
+            }
+            // Opcode 3: Input
+            else if opcode == 3 {
+                process[process[pointer + 1]] = mode
+                pointer = pointer + 2
+            }
+            // Opcode 4: Output
+            else if opcode == 4 {
+                output = process[process[pointer + 1]]
+                pointer = pointer + 2
+            }
+            // Opcode 99: Exit
+            else if opcode == 99 {
+                return output
+            }
+            else {
+                throw new RuntimeException(opcode.toString())
+            }
+        }
+
+        throw new RuntimeException("Program could not exit")
+    }
+
 }
