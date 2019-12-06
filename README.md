@@ -2,7 +2,7 @@
 [Advent of Code 2019](https://adventofcode.com/) in [Panda](https://github.com/panda-lang/panda)
 
 ### Background
-The aim of project is to explore pre-alpha version of [Panda](https://github.com/panda-lang/panda) language.
+The aim of project is to explore the pre-alpha version of [Panda](https://github.com/panda-lang/panda) language.
 Implementations of various programming puzzles should expose vulnerabilities, bugs and ill-thought-out solutions.
 
 ### Run
