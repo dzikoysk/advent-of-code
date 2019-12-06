@@ -23,6 +23,7 @@ main {
     }
 
     log 'Total number of direct and indirect orbits is ' + UniversalOrbitMap.count(com, 0)
+    log 'The minimum number of orbital transfers required to move is ' + UniversalOrbitMap.transfer(com)
 }
 
 local class UniversalOrbitMap {
@@ -34,6 +35,27 @@ local class UniversalOrbitMap {
         }
 
         return count
+    }
+
+    local static Int transfer(Node com) {
+        nil List you = com.trace('YOU')
+        nil List san = com.trace('SAN')
+
+        if you == null || san == null {
+            return 0-1
+        }
+
+        mut Int commonIndex = 0
+
+        for (;; commonIndex++) {
+            if you.get(commonIndex) == san.get(commonIndex) {
+                continue
+            }
+
+            break
+        }
+
+        return (you.size() - commonIndex) + (san.size() - commonIndex)
     }
 
     local static Node computeIfAbsent(Map orbits, String name) {
