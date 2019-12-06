@@ -1,0 +1,7 @@
+name: day06
+version: 1.0.0
+owner: dzikoysk
+
+scripts: {
+    main: day06.panda
+}
