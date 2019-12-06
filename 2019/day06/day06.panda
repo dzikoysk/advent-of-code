@@ -4,7 +4,46 @@ require java:collections
 
 import java.io.File
 import java.nio.file.Files
+import org.panda_lang.utilities.commons.collection.Node
 
 main {
-    log List wires = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    List mapOfLocalOrbits = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    Map orbits = new HashMap()
+    Node com = new Node('COM')
+    orbits.put(com.getElement(), com)
+
+    foreach (String entry : mapOfLocalOrbits) {
+        String[] values = entry.split("\)")
+
+        Node object = UniversalOrbitMap.computeIfAbsent(orbits, values[0])
+        Node around = UniversalOrbitMap.computeIfAbsent(orbits, values[1])
+
+        object.add(around)
+    }
+
+    log 'Total number of direct and indirect orbits is ' + UniversalOrbitMap.count(com, 0)
+}
+
+local class UniversalOrbitMap {
+    local static Int count(Node node, Int level) {
+        mut Int count = level
+
+        foreach (Node child : node.getChildren()) {
+            count = count + UniversalOrbitMap.count(child, level + 1)
+        }
+
+        return count
+    }
+
+    local static Node computeIfAbsent(Map orbits, String name) {
+        nil mut Node node = orbits.get(name) as Node
+
+        if node == null {
+            node = new Node(name)
+            orbits.put(name, node)
+        }
+
+        return node
+    }
 }
