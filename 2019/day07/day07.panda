@@ -18,7 +18,8 @@ main {
     //log amplifiers.run(intCodes, 0, 1, 2, 3, 4)
     // log amplifiers.run(intCodes, 1, 0, 4, 3, 2)
 
-     log 'The highest signal that can be sent to the thrusters is ' + amplifiers.findMax(intCodes)
+     log 'The highest signal (0-4) that can be sent to the thrusters is ' + amplifiers.findMax(intCodes, 0, 5)
+     log 'The highest signal (5-9) that can be sent to the thrusters is ' + amplifiers.findMax(intCodes, 5, 10)
 }
 
 local class Amplifiers {
@@ -39,27 +40,27 @@ local class Amplifiers {
         return resultE
     }
 
-    local String findMax(Int[] intCodes) {
+    local String findMax(Int[] intCodes, Int init, Int to) {
         mut Int max = 0
         mut String signal = ''
 
-        for (mut Int ampA = 0; ampA < 5; ampA++) {
-            for (mut Int ampB = 0; ampB < 5; ampB++) {
+        for (mut Int ampA = init; ampA < to; ampA++) {
+            for (mut Int ampB = init; ampB < to; ampB++) {
                 if ampB == ampA {
                     continue
                 }
 
-                for (mut Int ampC = 0; ampC < 5; ampC++) {
+                for (mut Int ampC = init; ampC < to; ampC++) {
                     if ampC == ampA || ampC == ampB {
                         continue
                     }
 
-                    for (mut Int ampD = 0; ampD < 5; ampD++) {
+                    for (mut Int ampD = init; ampD < to; ampD++) {
                         if ampD == ampA || ampD == ampB || ampD == ampC {
                             continue
                         }
 
-                        for (mut Int ampE = 0; ampE < 5; ampE++) {
+                        for (mut Int ampE = init; ampE < to; ampE++) {
                             if ampE == ampA || ampE == ampB || ampE == ampC || ampE == ampD {
                                 continue
                             }
