@@ -1,0 +1,23 @@
+module aoc
+
+require java:collections
+
+export java.io.File
+export java.nio.file.Files
+export org.panda_lang.utilities.commons.FileUtils
+
+public class AdventOfCode {
+
+    public static List readContentAsLines() {
+        return Files.readAllLines(getInputFile().toPath())
+    }
+
+    public static String readContent() {
+        return FileUtils.getContentOfFile(getInputFile())
+    }
+
+    local static File getInputFile() {
+        return new File(System.getProperty("input"))
+    }
+
+}

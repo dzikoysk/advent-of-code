@@ -1,0 +1,156 @@
+module vm
+
+require java:collections
+
+import org.panda_lang.utilities.commons.StringUtils
+
+public class VM {
+
+    public Int launch(Int[] instructions, Bool inputLock, Int... values) {
+        Int[] process = Arrays.copyOf(instructions, instructions.size()) as Int[]
+        Stack input = new Stack()
+
+        for (mut Int index = 0; index < values.size(); index++) {
+            input.push(values[values.size() - index - 1])
+        }
+
+        return execute(process, inputLock, input)
+    }
+
+    shared Int execute(Int[] process, Bool inputLock, Stack input) {
+        mut Int pointer = 0
+        mut Int output = 0
+
+        while pointer < process.size() {
+            Int parameter = process[pointer]
+            String fixedParameter = StringUtils.buildSpace(5 - parameter.toString().length()).replace(' ', '0') + parameter.toString()
+            Int opcode = Int.parseInt(fixedParameter.substring(3).toString())
+
+            // Opcode 99: Exit
+            if opcode == 99 {
+                return output
+            }
+
+            Bool modeA = fixedParameter.charAt(0).toString() == '1'
+            Bool modeB = fixedParameter.charAt(1).toString() == '1'
+            Bool modeC = fixedParameter.charAt(2).toString() == '1'
+            Int valueA = VM.select(process, modeC, pointer + 1)
+
+            // Opcode 3: Input
+            if opcode == 3 {
+                if inputLock {
+                    VM.set(process, false, pointer + 1, input.peek() as Int)
+                }
+                else {
+                    VM.set(process, false, pointer + 1, input.pop() as Int)
+                }
+
+                pointer = pointer + 2
+                continue
+            }
+            // Opcode 4: Output
+            else if opcode == 4 {
+                log 'TEST >> ' + (output = valueA)
+                pointer = pointer + 2
+                continue
+            }
+
+            Int valueB = VM.select(process, modeB, pointer + 2)
+
+            // Opcode 1: Add
+            if opcode == 1 {
+                VM.set(process, false, pointer + 3, valueA + valueB)
+                pointer = pointer + 4
+                continue
+            }
+            // Opcode 2: Multiply
+            else if opcode == 2 {
+                VM.set(process, false, pointer + 3, valueA * valueB)
+                pointer = pointer + 4
+                continue
+            }
+            // Opcode 5: Jump if true
+            else if opcode == 5 {
+                if valueA > 0 {
+                    pointer = valueB
+                }
+                else {
+                    pointer = pointer + 3
+                }
+                continue
+            }
+            // Opcode 6: Jump if false
+            else if opcode == 6 {
+                if valueA == 0 {
+                    pointer = valueB
+                }
+                else {
+                    pointer = pointer + 3
+                }
+                continue
+            }
+
+            Int valueC = VM.select(process, modeA, pointer + 3)
+
+            // Opcode 7: Less than
+            if opcode == 7 {
+                if valueA < valueB {
+                    VM.set(process, false, pointer + 3, 1)
+                }
+                else {
+                    VM.set(process, false, pointer + 3, 0)
+                }
+                pointer = pointer + 4
+            }
+            // Opcode 8: Equals
+            else if opcode == 8 {
+                if valueA == valueB {
+                    VM.set(process, false, pointer + 3, 1)
+                }
+                else {
+                    VM.set(process, false, pointer + 3, 0)
+                }
+                pointer = pointer + 4
+            }
+            else {
+                throw new RuntimeException("Unknown opcode " + opcode.toString())
+            }
+        }
+
+        throw new RuntimeException("Program could not exit")
+    }
+
+    shared static Int set(Int[] process, Bool mode, Int address, Int value) {
+        if (mode) {
+            process[address] = value
+        }
+        else {
+            process[process[address]] = value
+        }
+    }
+
+    shared static Int select(Int[] process, Bool mode, Int address) {
+        if (mode) {
+            return process[address]
+        }
+        else {
+            return process[process[address]]
+        }
+    }
+
+}
+
+public class VMUtils {
+
+    public static Int[] toIntCodes(String data) {
+        String[] content = data.split(',')
+        Int[] intCodes = new Int[content.size()]
+
+        for (mut Int point = 0; point < content.size(); point++) {
+            intCodes[point] = Int.parseInt(content[point])
+        }
+
+        return intCodes
+    }
+
+}

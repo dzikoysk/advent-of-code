@@ -1,0 +1,82 @@
+module day07
+
+require java:collections
+
+require '../commons/aoc'
+require aoc
+
+require '../commons/vm'
+require vm
+
+main {
+    Int[] intCodes = VMUtils.toIntCodes(AdventOfCode.readContent())
+
+    VM vm = new VM()
+    Amplifiers amplifiers = new Amplifiers(vm)
+
+    // log amplifiers.run(intCodes, 4, 3, 2, 1, 0)
+    //log amplifiers.run(intCodes, 0, 1, 2, 3, 4)
+    // log amplifiers.run(intCodes, 1, 0, 4, 3, 2)
+
+     log 'The highest signal that can be sent to the thrusters is ' + amplifiers.findMax(intCodes)
+}
+
+local class Amplifiers {
+
+    local VM vm
+
+    constructor(VM vm) {
+        this.vm = vm
+    }
+
+    local Int run(Int[] intCodes, Int ampA, Int ampB, Int ampC, Int ampD, Int ampE) {
+        Int resultA = vm.launch(intCodes, false, ampA, 0)
+        Int resultB = vm.launch(intCodes, false, ampB, resultA)
+        Int resultC = vm.launch(intCodes, false, ampC, resultB)
+        Int resultD = vm.launch(intCodes, false, ampD, resultC)
+        Int resultE = vm.launch(intCodes, false, ampE, resultD)
+
+        return resultE
+    }
+
+    local String findMax(Int[] intCodes) {
+        mut Int max = 0
+        mut String signal = ''
+
+        for (mut Int ampA = 0; ampA < 5; ampA++) {
+            for (mut Int ampB = 0; ampB < 5; ampB++) {
+                if ampB == ampA {
+                    continue
+                }
+
+                for (mut Int ampC = 0; ampC < 5; ampC++) {
+                    if ampC == ampA || ampC == ampB {
+                        continue
+                    }
+
+                    for (mut Int ampD = 0; ampD < 5; ampD++) {
+                        if ampD == ampA || ampD == ampB || ampD == ampC {
+                            continue
+                        }
+
+                        for (mut Int ampE = 0; ampE < 5; ampE++) {
+                            if ampE == ampA || ampE == ampB || ampE == ampC || ampE == ampD {
+                                continue
+                            }
+
+                            Int result = run(intCodes, ampA, ampB, ampC, ampD, ampE)
+
+                            if result > max {
+                                signal = '' + ampE + ampD + ampC + ampB + ampA + '| ' + result
+                                max = result
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return signal
+    }
+
+}

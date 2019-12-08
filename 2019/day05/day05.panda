@@ -1,13 +1,13 @@
 module day05
 
-require java:collections
+require '../commons/aoc'
+require aoc
 
-import java.io.File
-import org.panda_lang.utilities.commons.FileUtils
-import org.panda_lang.utilities.commons.StringUtils
+require '../commons/vm'
+require vm
 
 main {
-    String[] content = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(",")
+    String[] content = AdventOfCode.readContent().split(",")
     Int[] intCodes = new Int[content.size()]
 
     for (mut Int point = 0; point < content.size(); point++) {
@@ -15,130 +15,6 @@ main {
     }
 
     VM vm = new VM()
-    log 'The program produced ' + vm.launch(intCodes, 1) + ' code'
-    log 'Diagnostic code for system ID 5 is ' + vm.launch(intCodes, 5)
-}
-
-local class VM {
-
-    local Int launch(Int[] instructions, Int id) {
-        Int[] process = Arrays.copyOf(instructions, instructions.size()) as Int[]
-        return execute(process, id)
-    }
-
-    local Int execute(Int[] process, Int id) {
-        mut Int pointer = 0
-        mut Int output = 0
-
-        while pointer < process.size() {
-            Int parameter = process[pointer]
-            String fixedParameter = StringUtils.buildSpace(5 - parameter.toString().length()).replace(' ', '0') + parameter.toString()
-            Int opcode = Int.parseInt(fixedParameter.substring(3).toString())
-
-            // Opcode 99: Exit
-            if opcode == 99 {
-                return output
-            }
-
-            Bool modeA = fixedParameter.charAt(0).toString() == '1'
-            Bool modeB = fixedParameter.charAt(1).toString() == '1'
-            Bool modeC = fixedParameter.charAt(2).toString() == '1'
-            Int valueA = VM.select(process, modeC, pointer + 1)
-
-            // Opcode 3: Input
-            if opcode == 3 {
-                VM.set(process, false, pointer + 1, id)
-                pointer = pointer + 2
-                continue
-            }
-            // Opcode 4: Output
-            else if opcode == 4 {
-                log 'TEST >> ' + (output = valueA)
-                pointer = pointer + 2
-                continue
-            }
-
-            Int valueB = VM.select(process, modeB, pointer + 2)
-
-            // Opcode 1: Add
-            if opcode == 1 {
-                VM.set(process, false, pointer + 3, valueA + valueB)
-                pointer = pointer + 4
-                continue
-            }
-            // Opcode 2: Multiply
-            else if opcode == 2 {
-                VM.set(process, false, pointer + 3, valueA * valueB)
-                pointer = pointer + 4
-                continue
-            }
-            // Opcode 5: Jump if true
-            else if opcode == 5 {
-                if valueA > 0 {
-                    pointer = valueB
-                }
-                else {
-                    pointer = pointer + 3
-                }
-                continue
-            }
-            // Opcode 6: Jump if false
-            else if opcode == 6 {
-                if valueA == 0 {
-                    pointer = valueB
-                }
-                else {
-                    pointer = pointer + 3
-                }
-                continue
-            }
-
-            Int valueC = VM.select(process, modeA, pointer + 3)
-
-            // Opcode 7: Less than
-            if opcode == 7 {
-                if valueA < valueB {
-                    VM.set(process, false, pointer + 3, 1)
-                }
-                else {
-                    VM.set(process, false, pointer + 3, 0)
-                }
-                pointer = pointer + 4
-            }
-            // Opcode 8: Equals
-            else if opcode == 8 {
-                if valueA == valueB {
-                    VM.set(process, false, pointer + 3, 1)
-                }
-                else {
-                    VM.set(process, false, pointer + 3, 0)
-                }
-                pointer = pointer + 4
-            }
-            else {
-                throw new RuntimeException("Unknown opcode " + opcode.toString())
-            }
-        }
-
-        throw new RuntimeException("Program could not exit")
-    }
-
-    local static Int set(Int[] process, Bool mode, Int address, Int value) {
-        if (mode) {
-            process[address] = value
-        }
-        else {
-            process[process[address]] = value
-        }
-    }
-
-    local static Int select(Int[] process, Bool mode, Int address) {
-        if (mode) {
-            return process[address]
-        }
-        else {
-            return process[process[address]]
-        }
-    }
-
+    log 'The program produced ' + vm.launch(intCodes, true, 1, 0) + ' code'
+    log 'Diagnostic code for system ID 5 is ' + vm.launch(intCodes, true, 5, 0)
 }

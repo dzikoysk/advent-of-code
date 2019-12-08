@@ -1,0 +1,7 @@
+name: aoc
+version: 1.0.0
+owner: dzikoysk
+
+scripts: {
+    main: utils.panda
+}

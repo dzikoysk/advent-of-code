@@ -1,0 +1,7 @@
+name: vm
+version: 1.0.0
+owner: dzikoysk
+
+scripts: {
+    main: vm.panda
+}
