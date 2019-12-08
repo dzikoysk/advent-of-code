@@ -5,6 +5,134 @@ require java:collections
 require '../commons/aoc'
 require aoc
 
+import org.panda_lang.utilities.commons.console.Effect
+
 main {
-    log String content = AdventOfCode.readContent()
+    String content = AdventOfCode.readContent()
+    List layers = SpaceImageFormat.loadLayers(content, 25, 6)
+
+    log 'The number of 1 digits multiplied by the number of 2 digits is ' + SpaceImageFormat.corruptedLayersStatus(layers)
+    log 'The message is produced after decoding your image is:'
+    SpaceImageFormat.printLayer(SpaceImageFormat.decodeImage(layers, 25, 6))
+}
+
+local class SpaceImageFormat {
+
+    local static String[][] decodeImage(List layers, Int width, Int height) {
+        String[][] finalImage = new String[width][height]
+
+        for (mut Int x = 0; x < finalImage.size(); x++) {
+            for (mut Int y = 0; y < finalImage[x].size(); y++) {
+                for (mut Int index = 0; index < layers.size(); index++) {
+                    Int[][] layer = layers.get(index) as Int[][]
+
+                    Int pixel = layer[x][y]
+                    nil String finalPixel = finalImage[x][y]
+
+                    if finalPixel != null && finalPixel != ' ' {
+                        continue
+                    }
+
+                    finalImage[x][y] = colored(pixel)
+                }
+            }
+        }
+
+        return finalImage
+    }
+
+    local static String colored(Int pixel) {
+        String colored = '•'
+
+        if pixel == 0 {
+            return Effect.BLACK + colored + Effect.RESET
+        }
+        else if pixel == 1 {
+            return Effect.WHITE + colored + Effect.RESET
+        }
+        else if pixel == 2 {
+            return ' '
+        }
+
+        throw new RuntimeException("Unknown color " + pixel)
+    }
+
+    local static Int corruptedLayersStatus(List layers) {
+        mut Int minZero = Int.MAX_VALUE
+        nil mut Int[][] selectedLayer = null
+
+        for (mut Int index = 0; index < layers.size(); index++) {
+            Int[][] layer = layers.get(index) as Int[][]
+            Int zeroCount = countPixels(layer, 0)
+
+            if zeroCount < minZero {
+                selectedLayer = layer
+            }
+
+            if zeroCount < minZero {
+                minZero = zeroCount
+            }
+        }
+
+        if selectedLayer == null {
+            throw new RuntimeException('Corrupted image')
+        }
+
+        Int oneDigits = countPixels(selectedLayer, 1)
+        Int twoDigits = countPixels(selectedLayer, 2)
+
+        return oneDigits * twoDigits
+    }
+
+    local static Int printLayer(Object[][] layer) {
+        for (mut Int x = 0; x < layer.size(); x++) {
+            StringBuilder content = new StringBuilder()
+
+            for (mut Int y = 0; y < layer[x].size(); y++) {
+                content.append(layer[x][y])
+            }
+
+            log content
+        }
+    }
+
+    local static Int countPixels(Int[][] layer, Int pixel) {
+        mut Int pixelCount = 0
+
+        for (mut Int x = 0; x < layer.size(); x++) {
+            for (mut Int y = 0; y < layer[x].size(); y++) {
+                if layer[x][y] == pixel {
+                    pixelCount++
+                }
+            }
+        }
+
+        return pixelCount
+    }
+
+    local static List loadLayers(String content, Int width, Int height) {
+        Int[] data = new Int[content.length()]
+
+        for (mut Int index = 0; index < content.length(); index++) {
+            data[index] = Int.parseInt(content.charAt(index).toString())
+        }
+
+        List layers = new ArrayList()
+
+        for (mut Int index = 0; index < data.size();) {
+            Int[][] layer = new Int[width][height]
+
+            for (mut Int x = 0; x < layer.size(); x++) {
+                for (mut Int y = 0; y < layer[x].size(); y++) {
+                    layer[x][y] = data[index]
+                    index++
+                }
+            }
+
+            layers.add(layer)
+        }
+
+        return layers
+    }
+
 }
