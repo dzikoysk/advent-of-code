@@ -124,8 +124,7 @@ local class SpaceImageFormat {
 
             for (mut Int x = 0; x < layer.size(); x++) {
                 for (mut Int y = 0; y < layer[x].size(); y++) {
-                    layer[x][y] = data[index]
-                    index++
+                    layer[x][y] = data[index++]
                 }
             }
 
