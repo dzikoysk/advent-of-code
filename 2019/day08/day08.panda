@@ -67,9 +67,6 @@ local class SpaceImageFormat {
 
             if zeroCount < minZero {
                 selectedLayer = layer
-            }
-
-            if zeroCount < minZero {
                 minZero = zeroCount
             }
         }
