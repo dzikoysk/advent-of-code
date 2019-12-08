@@ -1,0 +1,10 @@
+module day08
+
+require java:collections
+
+require '../commons/aoc'
+require aoc
+
+main {
+    log String content = AdventOfCode.readContent()
+}
