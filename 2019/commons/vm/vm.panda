@@ -6,7 +6,7 @@ import org.panda_lang.utilities.commons.StringUtils
 
 public class VM {
 
-    public Long launch(Long[] instructions, Bool inputLock, Long[] values) {
+    public Long launch(Long[] instructions, Long[] values) {
         Long[] process = Arrays.copyOf(instructions, instructions.size()) as Long[]
         Stack input = new Stack()
 
@@ -17,6 +17,22 @@ public class VM {
         Program program = new Program(instructions, input)
         return program.execute()
     }
+
+    public Long[] toCodes(String data) {
+        String[] content = data.split(',')
+        Long[] codes = new Long[100_000]
+
+        for (mut Int point = content.size(); point < codes.size(); point++) {
+            codes[point] = 0L
+        }
+
+        for (mut Int point = 0; point < content.size(); point++) {
+            codes[point] = Long.parseLong(content[point])
+        }
+
+        return codes
+    }
+
 }
 
 local class Program {
@@ -86,7 +102,7 @@ local class Program {
                     pointer = toInt(select(2, modes))
                 }
                 else {
-                    log 'JUMP_IF_TRUE', pointer, parameter
+                    // log 'JUMP_IF_TRUE', pointer, parameter
                     pointer = pointer + 3
                 }
             }
@@ -123,7 +139,7 @@ local class Program {
                 pointer = pointer + 4
             }
             else if opcode == RELATIVE {
-                relative = relative + toInt(process[pointer + 1])
+                relative = relative + select(1, modes)
                 pointer = pointer + 2
                 // log 'RELATIVE', relative, pointer, parameter
             }
@@ -179,25 +195,6 @@ local class Program {
 
     local Int toInt(Long long) {
         return (long as Number).intValue()
-    }
-
-}
-
-public class VMUtils {
-
-    public static Long[] toCodes(String data) {
-        String[] content = data.split(',')
-        Long[] codes = new Long[100_000]
-
-        for (mut Int point = content.size(); point < codes.size(); point++) {
-            codes[point] = 0L
-        }
-
-        for (mut Int point = 0; point < content.size(); point++) {
-            codes[point] = Long.parseLong(content[point])
-        }
-
-        return codes
     }
 
 }
