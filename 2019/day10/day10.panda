@@ -1,0 +1,10 @@
+module day10
+
+require java:collections
+
+require '../commons/aoc'
+require aoc
+
+main {
+    log List content = AdventOfCode.readContentAsLines()
+}

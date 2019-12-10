@@ -1,0 +1,7 @@
+name: day10
+version: 1.0.0
+owner: dzikoysk
+
+scripts: {
+    main: day10.panda
+}
