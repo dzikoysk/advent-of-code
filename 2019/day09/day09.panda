@@ -1,0 +1,32 @@
+module day09
+
+require java:collections
+
+require '../commons/aoc'
+require aoc
+
+require '../commons/vm'
+require vm
+
+main {
+    Long[] program = VMUtils.toCodes(AdventOfCode.readContent())
+    VM vm = new VM()
+
+    // Test 1
+    //vm.launch(program, true, new Long[0])
+
+    // Test 2
+    // vm.launch(program, false, new Long[0])
+    // out -> 1219070632396864
+
+    // Test 3
+    // vm.launch(program, false, new Long[0])
+    // out -> 1125899906842624
+
+    Long[] data = new Long[1]
+    data[0] = 1L
+    log 'BOOST keycode is ' + vm.launch(program, true, data)
+
+    data[0] = 2L
+    log 'The coordinates of the distress signal are ' + vm.launch(program, true, data)
+}

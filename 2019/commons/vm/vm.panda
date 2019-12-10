@@ -6,151 +6,198 @@ import org.panda_lang.utilities.commons.StringUtils
 
 public class VM {
 
-    public Int launch(Int[] instructions, Bool inputLock, Int... values) {
-        Int[] process = Arrays.copyOf(instructions, instructions.size()) as Int[]
+    public Long launch(Long[] instructions, Bool inputLock, Long[] values) {
+        Long[] process = Arrays.copyOf(instructions, instructions.size()) as Long[]
         Stack input = new Stack()
 
         for (mut Int index = 0; index < values.size(); index++) {
             input.push(values[values.size() - index - 1])
         }
 
-        return execute(process, inputLock, input)
+        Program program = new Program(instructions, input)
+        return program.execute()
+    }
+}
+
+local class Program {
+
+    local static Int ADD = 1
+    local static Int MULTIPLY = 2
+    local static Int INPUT = 3
+    local static Int OUTPUT = 4
+    local static Int JUMP_IF_TRUE = 5
+    local static Int JUMP_IF_FALSE = 6
+    local static Int LESS_THAN = 7
+    local static Int EQUALS = 8
+    local static Int RELATIVE = 9
+    local static Int EXIT = 99
+
+    local Long[] process
+    local Stack input
+    local mut Int pointer = 0
+    local mut Int relative = 0
+    local mut Long output = 0
+    local mut Bool running = true
+
+    constructor (Long[] process, Stack input) {
+        this.process = process
+        this.input = input
     }
 
-    shared Int execute(Int[] process, Bool inputLock, Stack input) {
-        mut Int pointer = 0
-        mut Int output = 0
-
-        while pointer < process.size() {
-            Int parameter = process[pointer]
+    // 109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99
+    // Steps:
+    //   109 => relative + process[pointer + 1] = 0 + 1 = 1, pointer 2
+    //   204 => output process[relative + process[pointer + 1]] = output process[-1 + 1] = out 109, pointer = 4
+    //   -1
+    local Long execute() {
+        while running {
+            Long parameter = process[pointer]
             String fixedParameter = StringUtils.buildSpace(5 - parameter.toString().length()).replace(' ', '0') + parameter.toString()
             Int opcode = Int.parseInt(fixedParameter.substring(3).toString())
 
-            // Opcode 99: Exit
-            if opcode == 99 {
-                return output
+            String[] modes = new String[3]
+            modes[2] = fixedParameter.charAt(0).toString()
+            modes[1] = fixedParameter.charAt(1).toString()
+            modes[0] = fixedParameter.charAt(2).toString()
+
+            if opcode == ADD {
+                // log 'ADD', select(1, modes) + ' + ' + select(2, modes) + ' = ' + (select(1, modes) + select(2, modes)), select(3, modes), pointer, parameter
+                set(3, modes, select(1, modes) + select(2, modes))
+                pointer = pointer + 4
             }
-
-            Bool modeA = fixedParameter.charAt(0).toString() == '1'
-            Bool modeB = fixedParameter.charAt(1).toString() == '1'
-            Bool modeC = fixedParameter.charAt(2).toString() == '1'
-            Int valueA = VM.select(process, modeC, pointer + 1)
-
-            // Opcode 3: Input
-            if opcode == 3 {
-                if inputLock {
-                    VM.set(process, false, pointer + 1, input.peek() as Int)
+            else if opcode == MULTIPLY {
+                // log 'SET', select(1, modes) + ' * ' + select(2, modes) + ' = ' + (select(1, modes) + ' * ' + select(2, modes)), pointer, parameter
+                set(3, modes, select(1, modes) * select(2, modes))
+                pointer = pointer + 4
+            }
+            else if opcode == INPUT {
+                // log 'INPUT', input.peek(), pointer, parameter
+                set(1, modes, input.pop() as Long)
+                pointer = pointer + 2
+            }
+            else if opcode == OUTPUT {
+                // log 'OUTPUT', select(1, modes), pointer, parameter
+                log '>> ' + (output = select(1, modes))
+                pointer = pointer + 2
+            }
+            else if opcode == JUMP_IF_TRUE {
+                if select(1, modes) != 0L {
+                    // log 'JUMP_IF_TRUE', select(1, modes), select(2, modes), pointer, parameter
+                    pointer = toInt(select(2, modes))
                 }
                 else {
-                    VM.set(process, false, pointer + 1, input.pop() as Int)
-                }
-
-                pointer = pointer + 2
-                continue
-            }
-            // Opcode 4: Output
-            else if opcode == 4 {
-                log 'TEST >> ' + (output = valueA)
-                pointer = pointer + 2
-                continue
-            }
-
-            Int valueB = VM.select(process, modeB, pointer + 2)
-
-            // Opcode 1: Add
-            if opcode == 1 {
-                VM.set(process, false, pointer + 3, valueA + valueB)
-                pointer = pointer + 4
-                continue
-            }
-            // Opcode 2: Multiply
-            else if opcode == 2 {
-                VM.set(process, false, pointer + 3, valueA * valueB)
-                pointer = pointer + 4
-                continue
-            }
-            // Opcode 5: Jump if true
-            else if opcode == 5 {
-                if valueA > 0 {
-                    pointer = valueB
-                }
-                else {
+                    log 'JUMP_IF_TRUE', pointer, parameter
                     pointer = pointer + 3
                 }
-                continue
             }
-            // Opcode 6: Jump if false
-            else if opcode == 6 {
-                if valueA == 0 {
-                    pointer = valueB
+            else if opcode == JUMP_IF_FALSE {
+                if select(1, modes) == 0L {
+                    // log 'JUMP_IF_FALSE', select(1, modes), select(2, modes), pointer, parameter
+                    pointer = toInt(select(2, modes))
                 }
                 else {
+                    // log 'JUMP_IF_FALSE', pointer, parameter
                     pointer = pointer + 3
                 }
-                continue
             }
-
-            Int valueC = VM.select(process, modeA, pointer + 3)
-
-            // Opcode 7: Less than
-            if opcode == 7 {
-                if valueA < valueB {
-                    VM.set(process, false, pointer + 3, 1)
+            else if opcode == LESS_THAN {
+                if select(1, modes) < select(2, modes) {
+                    // log 'LESS_THAN', select(1, modes) + ' < ' + select(2, modes), pointer, parameter
+                    set(3, modes, 1L)
                 }
                 else {
-                    VM.set(process, false, pointer + 3, 0)
+                    // log 'LESS_THAN', pointer, parameter
+                    set(3, modes, 0L)
                 }
                 pointer = pointer + 4
             }
-            // Opcode 8: Equals
-            else if opcode == 8 {
-                if valueA == valueB {
-                    VM.set(process, false, pointer + 3, 1)
+            else if opcode == EQUALS {
+                if select(1, modes) == select(2, modes) {
+                    // log 'EQUALS', select(1, modes) + ' == ' + select(2, modes), pointer, parameter
+                    set(3, modes, 1L)
                 }
                 else {
-                    VM.set(process, false, pointer + 3, 0)
+                    // log 'EQUALS', pointer, parameter
+                    set(3, modes, 0L)
                 }
                 pointer = pointer + 4
+            }
+            else if opcode == RELATIVE {
+                relative = relative + toInt(process[pointer + 1])
+                pointer = pointer + 2
+                // log 'RELATIVE', relative, pointer, parameter
+            }
+            else if opcode == EXIT {
+                running = false
+                // log 'EXIT'
             }
             else {
-                throw new RuntimeException("Unknown opcode " + opcode.toString())
+                throw new RuntimeException('Unknown opcode ' + parameter + ' with pointer ' + pointer)
             }
         }
 
-        throw new RuntimeException("Program could not exit")
+        return output
     }
 
-    shared static Int set(Int[] process, Bool mode, Int address, Int value) {
-        if (mode) {
-            process[address] = value
+    local set(Int parameter, String[] modes, Long value) {
+        String mode = modes[parameter - 1]
+
+        if mode == '2' {
+            process[getPointer(pointer + parameter) + relative] = value
+        }
+        else if mode == '1' {
+            process[pointer + parameter] = value
+        }
+        else if mode == '0' {
+            process[getPointer(pointer + parameter)] = value
         }
         else {
-            process[process[address]] = value
+            throw new RuntimeException('Unknown mode ' + mode)
         }
     }
 
-    shared static Int select(Int[] process, Bool mode, Int address) {
-        if (mode) {
-            return process[address]
+    local Long select(Int parameter, String[] modes) {
+        String mode = modes[parameter - 1]
+
+        if mode == '2' {
+            return process[getPointer(pointer + parameter) + relative]
+        }
+        else if mode == '1' {
+            return process[pointer + parameter]
+        }
+        else if mode == '0' {
+            return process[getPointer(pointer + parameter)]
         }
         else {
-            return process[process[address]]
+            throw new RuntimeException('Unknown mode ' + mode)
         }
+    }
+
+    local Int getPointer(Int pointer) {
+        return toInt(process[pointer])
+    }
+
+    local Int toInt(Long long) {
+        return (long as Number).intValue()
     }
 
 }
 
 public class VMUtils {
 
-    public static Int[] toIntCodes(String data) {
+    public static Long[] toCodes(String data) {
         String[] content = data.split(',')
-        Int[] intCodes = new Int[content.size()]
+        Long[] codes = new Long[100_000]
 
-        for (mut Int point = 0; point < content.size(); point++) {
-            intCodes[point] = Int.parseInt(content[point])
+        for (mut Int point = content.size(); point < codes.size(); point++) {
+            codes[point] = 0L
         }
 
-        return intCodes
+        for (mut Int point = 0; point < content.size(); point++) {
+            codes[point] = Long.parseLong(content[point])
+        }
+
+        return codes
     }
 
 }

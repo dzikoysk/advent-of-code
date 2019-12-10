@@ -21,6 +21,7 @@ Implementations of various programming puzzles should expose vulnerabilities, bu
 | 06 | [Universal Orbit Map][day06] | ✓ |
 | 07 | [Amplification Circuit][day07] | ✓ |
 | 08 | [Space Image Format][day08] | ✓ |
+| 09 | [Sensor Boost][day09] | ✓ |
 
 [day01]: https://adventofcode.com/2019/day/1
 [day02]: https://adventofcode.com/2019/day/2
