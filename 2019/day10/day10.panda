@@ -5,6 +5,80 @@ require java:collections
 require '../commons/aoc'
 require aoc
 
+import java.lang.Math
+import java.awt.Point
+import java.text.DecimalFormat
+
 main {
-    log List content = AdventOfCode.readContentAsLines()
+    List content = AdventOfCode.readContentAsLines()
+    List asteroids = MonitoringStation.load(content)
+
+    mut Int count = 0
+    nil mut Point selectedAsteroid = null
+
+    foreach (Point asteroid : asteroids) {
+        Int currentCount = MonitoringStation.analyze(asteroids, asteroid)
+
+        if currentCount > count {
+            count = currentCount
+            selectedAsteroid = asteroid
+        }
+    }
+
+    log 'Selected asteroid ' + selectedAsteroid, count
 }
+
+local class MonitoringStation {
+
+    public static Int analyze(List asteroids, Point currentPoint) {
+        Map points = new HashMap()
+
+        foreach (Point asteroid : asteroids) {
+            if currentPoint == asteroid {
+                continue
+            }
+
+            Point between = new Point(toInt(currentPoint.getX() - asteroid.getX()), toInt(currentPoint.getY() - asteroid.getY()))
+            Double distance = asteroid.distance(currentPoint)
+            Double cos = between.getY() / distance
+            mut Double theta = Math.toDegrees(Math.atan2(between.getX(), between.getY()))
+
+            if theta < 0 {
+                theta = theta + 360
+            }
+
+            nil Point previousPoint = points.get(theta) as Point
+
+            if previousPoint == null || currentPoint.distance(previousPoint) > distance {
+                points.put(theta, asteroid)
+                continue
+            }
+        }
+
+        return points.size()
+    }
+
+    public static List load(List lines) {
+        Int height = lines.size()
+        Int width = (lines.get(0) as String).length()
+        List asteroids = new ArrayList()
+
+        for (mut Int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y) as String
+
+            for (mut Int x = 0; x < line.length(); x++) {
+                if line.charAt(x).toString() == '#' {
+                    asteroids.add(new Point(x, y))
+                }
+            }
+        }
+
+        return asteroids
+    }
+
+    public static Int toInt(Double double) {
+        return (double as Number).intValue()
+    }
+
+}
+
