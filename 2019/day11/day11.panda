@@ -1,0 +1,15 @@
+module day11
+
+require java:collections
+
+require '../commons/aoc'
+require aoc
+
+require '../commons/vm'
+require vm
+
+main {
+    VM vm = new VM()
+    Long[] program = vm.toCodes(AdventOfCode.readContent())
+    log 'Result ' + vm.launch(program, new Long[0])
+}

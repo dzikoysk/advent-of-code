@@ -15,22 +15,49 @@ main {
 
     mut Int count = 0
     nil mut Point selectedAsteroid = null
+    nil mut Map selectedMap = null
 
     foreach (Point asteroid : asteroids) {
-        Int currentCount = MonitoringStation.analyze(asteroids, asteroid)
+        Map map = MonitoringStation.analyze(asteroids, asteroid)
 
-        if currentCount > count {
-            count = currentCount
+        if map.size() > count {
+            count = map.size()
             selectedAsteroid = asteroid
+            selectedMap = map
         }
     }
 
     log 'Selected asteroid ' + selectedAsteroid, count
+
+    Map sortedMap = new TreeMap(selectedMap)
+    mut Int shotsCount = 0
+    List removed = new ArrayList()
+
+    foreach (Entry entry : sortedMap.entrySet()) {
+        Double angle = entry.getKey() as Double
+
+        if angle == 0 {
+            continue
+        }
+
+        Point asteroid = entry.getValue() as Point
+
+        if removed.contains(asteroid) {
+            continue
+        }
+
+        removed.add(asteroid)
+        shotsCount = shotsCount + 1
+
+        if shotsCount == 200 {
+            log asteroid.getX() * 100.0 + asteroid.getY()
+        }
+    }
 }
 
 local class MonitoringStation {
 
-    public static Int analyze(List asteroids, Point currentPoint) {
+    public static Map analyze(List asteroids, Point currentPoint) {
         Map points = new HashMap()
 
         foreach (Point asteroid : asteroids) {
@@ -55,7 +82,7 @@ local class MonitoringStation {
             }
         }
 
-        return points.size()
+        return points
     }
 
     public static List load(List lines) {
