@@ -37,7 +37,7 @@ type ReportAnalyzer {
             numbers.push(report.get(subIndex))
 
             if numbers.size() < criteria {
-                process(report, criteria, entries, numbers, index)
+                process(report, criteria, entries, numbers, index + 1)
                 numbers.pop()
                 continue
             }
