@@ -7,6 +7,9 @@ Implementations of various programming puzzles should expose vulnerabilities, bu
 
 ### Run
 ```bash
+git clone https://github.com/dzikoysk/advent-of-code.git
+
+cd <year>
 ./run.sh <day> <user>
 ```
 
@@ -16,7 +19,8 @@ Implementations of various programming puzzles should expose vulnerabilities, bu
 | Day | Name | Panda | 
 |:---:|:---|:---:|
 | - | Advent of Code 2020 | - |
-| 01 | - | - |
+| 01 | [Report Repair](https://adventofcode.com/2020/day/1) | ✓ |
+| 02 |  |  |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |
@@ -28,4 +32,4 @@ Implementations of various programming puzzles should expose vulnerabilities, bu
 | 08 | [Space Image Format](https://adventofcode.com/2019/day/8) | ✓ |
 | 09 | [Sensor Boost](https://adventofcode.com/2019/day/9) | ✓ |
 | 10 | [Monitoring Station](https://adventofcode.com/2019/day/10) | ✓ |
-| 11 | [Space Police](https://adventofcode.com/2019/day/11) |  |
+| 11 | [Space Police](https://adventofcode.com/2019/day/11) | - |

@@ -1,0 +1,61 @@
+module day01
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+
+main {
+    List report = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    // imagine having streams D:
+
+    for (mut Int index = 0; index < report.size(); index++) {
+        report.set(index, Long.parseLong(report.get(index).toString()) as Object)
+    }
+
+    log "Part one: " + ReportAnalyzer.process(report, 2) // 538464
+    log "Part two: " + ReportAnalyzer.process(report, 3) // 278783190
+}
+
+type ReportAnalyzer {
+
+    open static process(List report, Int criteria) -> Long {
+        HashSet entries = process(report, criteria, new HashSet(), new Stack(), -1)
+        mut Long result = 1
+
+        foreach (Long entry : entries) {
+            result = result * entry
+        }
+
+        return result
+    }
+
+    open static process(List report, Int criteria, HashSet entries, Stack numbers, Int index) -> HashSet {
+        for (mut Int subIndex = index + 1; (subIndex < report.size()) && entries.isEmpty(); subIndex++) {
+            numbers.push(report.get(subIndex))
+
+            if numbers.size() < criteria {
+                process(report, criteria, entries, numbers, index)
+                numbers.pop()
+                continue
+            }
+
+            mut Long sum = 0
+
+            foreach (Long value : numbers) {
+                sum = sum + value
+            }
+
+            if sum == 2020L /* Workaround bug causing comparison issues between longs and ints */ {
+                entries.addAll(numbers)
+            }
+
+            numbers.pop()
+        }
+
+        return entries
+    }
+
+}
