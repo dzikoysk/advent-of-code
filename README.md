@@ -20,7 +20,8 @@ cd <year>
 |:---:|:---|:---:|
 | - | Advent of Code 2020 | - |
 | 01 | [Report Repair](https://adventofcode.com/2020/day/1) | ✓ |
-| 02 |  |  |
+| 02 | [Password Philosophy](https://adventofcode.com/2020/day/2) | ✓ |
+| 03 | ... | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |
@@ -31,5 +32,5 @@ cd <year>
 | 07 | [Amplification Circuit](https://adventofcode.com/2019/day/7) | ✓ |
 | 08 | [Space Image Format](https://adventofcode.com/2019/day/8) | ✓ |
 | 09 | [Sensor Boost](https://adventofcode.com/2019/day/9) | ✓ |
-| 10 | [Monitoring Station](https://adventofcode.com/2019/day/10) | ✓ |
+| 10 | [Monitoring Station](https://adventofcode.com/2019/day/10) | ½ |
 | 11 | [Space Police](https://adventofcode.com/2019/day/11) | - |

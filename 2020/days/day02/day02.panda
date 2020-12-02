@@ -4,8 +4,66 @@ require java:collections
 
 import java.io.File
 import java.nio.file.Files
-import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
 
 main {
     List report = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    log "Part one: " + PasswordValidator.validate(report, PasswordValidator.SLED_RENTAL)
+    log "Part two: " + PasswordValidator.validate(report, PasswordValidator.TOBOGGAN)
+}
+
+type PasswordValidator {
+
+    open static String SLED_RENTAL = 'sled-rental-policy'
+    open static String TOBOGGAN = 'toboggan-policy'
+
+    open static validate (List report, String policy) -> Int {
+        mut Int valid = 0
+
+        foreach (String passwordPolicy : report) {
+            if (policy == SLED_RENTAL && PasswordValidator.'validate sled-rental'(passwordPolicy)) {
+                valid++
+            }
+
+            if (policy == TOBOGGAN && PasswordValidator.'validate toboggan'(passwordPolicy)) {
+                valid++
+            }
+        }
+
+        return valid
+    }
+
+    open static 'validate sled-rental' (String passwordPolicy) -> Bool {
+        String[] elements = passwordPolicy.split(' ')
+
+        String occurrencePolicy = elements[0]
+        String[] occurrencePolicyElements = occurrencePolicy.split('-')
+        Int minimum = Int.parseInt(occurrencePolicyElements[0])
+        Int maximum = Int.parseInt(occurrencePolicyElements[1])
+
+        String selectedLetter = elements[1].substring(0, 1)
+        String password = elements[2]
+        Int occurrences = StringUtils.countOccurrences(password, selectedLetter)
+
+        return occurrences >= minimum && occurrences <= maximum
+    }
+
+    open static 'validate toboggan' (String passwordPolicy) -> Bool {
+        String[] elements = passwordPolicy.split(' ')
+
+        String positionPolicy = elements[0]
+        String[] positionPolicyElements = positionPolicy.split('-')
+        Int first = Int.parseInt(positionPolicyElements[0]) - 1
+        Int second = Int.parseInt(positionPolicyElements[1]) - 1
+
+        String selectedLetter = elements[1].substring(0, 1)
+        String password = elements[2]
+
+        Bool firstOccurrence = selectedLetter == (password.charAt(first) + '')
+        Bool secondOccurrence = selectedLetter == (password.charAt(second) + '')
+
+        return (firstOccurrence || secondOccurrence) && (firstOccurrence != secondOccurrence)
+    }
+
 }
