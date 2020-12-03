@@ -30,7 +30,7 @@ type Bagno {
         this.report = report
     }
 
-    open countTrees(Int right, Int down) -> Int {
+    open countTrees (Int right, Int down) -> Int {
         Int patternWidth = (report.get(0) as String).length()
         Int patternHeight = report.size()
 

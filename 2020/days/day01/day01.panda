@@ -21,7 +21,7 @@ main {
 
 type ReportAnalyzer {
 
-    open static process(List report, Int criteria) -> Long {
+    open static process (List report, Int criteria) -> Long {
         HashSet entries = process(report, criteria, new HashSet(), new Stack(), -1)
         mut Long result = 1
 
@@ -32,7 +32,7 @@ type ReportAnalyzer {
         return result
     }
 
-    open static process(List report, Int criteria, HashSet entries, Stack numbers, Int index) -> HashSet {
+    open static process (List report, Int criteria, HashSet entries, Stack numbers, Int index) -> HashSet {
         for (mut Int subIndex = index + 1; (subIndex < report.size()) && entries.isEmpty(); subIndex++) {
             numbers.push(report.get(subIndex))
 

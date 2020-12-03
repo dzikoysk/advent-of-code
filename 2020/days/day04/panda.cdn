@@ -1,0 +1,7 @@
+name: day04
+version: 1.0.0
+owner: dzikoysk
+
+scripts: {
+    main: day04.panda
+}
