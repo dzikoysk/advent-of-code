@@ -1,0 +1,53 @@
+module day03
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.StringUtils
+
+main {
+    List report = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    Bagno bagno = new Bagno(report)
+    log 'Part one: ' + bagno.countTrees(3, 1)
+    log 'Part two: ' + (1L * bagno.countTrees(1, 1) * bagno.countTrees(3, 1) * bagno.countTrees(5, 1) * bagno.countTrees(7, 1) * bagno.countTrees(1, 2))
+}
+
+type ExtraMath {
+
+    open static modulo (Int num, Int divisor) -> Int {
+        return (num - divisor * (num / divisor))
+    }
+
+}
+
+type Bagno {
+
+    internal List report
+
+    constructor (List report) {
+        this.report = report
+    }
+
+    open countTrees(Int right, Int down) -> Int {
+        Int patternWidth = (report.get(0) as String).length()
+        Int patternHeight = report.size()
+
+        mut Int trees = 0
+        mut Int x = right
+
+        for (mut Int y = down; y < patternHeight; y = y + down) {
+            Char currentPosition = (report.get(y) as String).charAt(ExtraMath.modulo(x, patternWidth))
+
+            if ((currentPosition + '') == '#') {
+                trees++
+            }
+
+            x = x + right
+        }
+
+        return trees
+    }
+
+}
