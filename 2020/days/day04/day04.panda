@@ -12,11 +12,11 @@ main {
     String lineSeparator = System.lineSeparator()
     String[] passports = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(lineSeparator + lineSeparator)
 
-    log 'Part one: ' + PasswordChecker.validate(passports, lineSeparator, false)
-    log 'Part two: ' + PasswordChecker.validate(passports, lineSeparator, true)
+    log 'Part one: ' + PassportAnalyzer.validate(passports, lineSeparator, false)
+    log 'Part two: ' + PassportAnalyzer.validate(passports, lineSeparator, true)
 }
 
-type PasswordChecker {
+type PassportAnalyzer {
 
     open static validate (String[] passports, String separator, Bool validateFields) -> Int {
         mut Int valid = 0
