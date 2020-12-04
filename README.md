@@ -22,7 +22,8 @@ cd <year>
 | 01 | [Report Repair](https://adventofcode.com/2020/day/1) | ✓ |
 | 02 | [Password Philosophy](https://adventofcode.com/2020/day/2) | ✓ |
 | 03 | [Toboggan Trajectory](https://adventofcode.com/2020/day/3) | ✓ |
-| 04 | ... | ... |
+| 04 | [Passport Processing](https://adventofcode.com/2020/day/4) | ✓ |
+| 05 | ... | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |

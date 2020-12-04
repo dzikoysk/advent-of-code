@@ -5,7 +5,58 @@ require java:collections
 import java.io.File
 import java.nio.file.Files
 import org.panda_lang.utilities.commons.StringUtils
+import org.panda_lang.utilities.commons.FileUtils
 
 main {
-    List report = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    // Requires file in CRLF format
+    String lineSeparator = System.lineSeparator()
+    String[] passports = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(lineSeparator + lineSeparator)
+
+    log 'Part one: ' + PasswordChecker.validate(passports, lineSeparator, false)
+    log 'Part two: ' + PasswordChecker.validate(passports, lineSeparator, true)
+}
+
+type PasswordChecker {
+
+    open static validate (String[] passports, String separator, Bool validateFields) -> Int {
+        mut Int valid = 0
+
+        foreach (String passportData : passports) {
+            Map passport = new HashMap()
+
+            String[] fields = passportData.replace(' ', separator).split(separator)
+            Int count = fields.size()
+
+            if (count == 8 || (count == 7 && !passportData.contains('cid'))) {
+                if (!validateFields) {
+                    valid++
+                    continue
+                }
+
+                // Map passport data
+
+                foreach (String field : fields) {
+                    String[] entry = field.split(':')
+                    passport.put(entry[0], entry[1])
+                }
+
+                // Validate passport fields
+
+                Bool byr = (passport.get('byr') as String).matches('(^19[2-9][0-9]|^200[0-2])')                        // between 1920 - 2002
+                Bool iyr = (passport.get('iyr') as String).matches('^20(1[0-9]|20)')                                   // between 2010 - 2020
+                Bool eyr = (passport.get('eyr') as String).matches('^20(2[0-9]|30)')                                   // between 2020 - 2030
+                Bool hgt = (passport.get('hgt') as String).matches('(^1([5-8][0-9]|[9][0-3])cm|(59|6[0-9]|7[0-6])in)') // between 150 - 193cm or 59 - 76in
+                Bool hcl = (passport.get('hcl') as String).matches('^#[a-fA-F0-9]{6}')                                 // hex color code
+                Bool ecl = (passport.get('ecl') as String).matches('(amb|blu|brn|gry|grn|hzl|oth)')                    // matches eye color
+                Bool pid = (passport.get('pid') as String).matches('[0-9]{9}')                                         // nine-digit id
+
+                if byr && iyr && eyr && hgt && hcl && ecl && pid {
+                    valid++
+                }
+            }
+        }
+
+        return valid
+    }
+
 }
