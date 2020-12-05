@@ -1,0 +1,67 @@
+module day04
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import java.lang.Math
+
+main {
+    List report = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    Int seatsLength = 128
+    Int seatsWidth = 8
+
+    mut Int max = -1
+    mut Int seats = seatsLength * seatsWidth
+    List ids = new ArrayList(seats)
+
+    foreach (String seatLocation : report) {
+        mut Int minX = 0
+        mut Int maxX = seatsLength - 1
+        mut Int minY = 0
+        mut Int maxY = seatsWidth - 1
+
+        for (mut Int index = 0; index < 10; index++) {
+            String direction = seatLocation.charAt(index) + ''
+
+            if direction == 'F' {
+                maxX = maxX - ExtraMath.ceil((maxX - minX) / 2.0)
+            }
+            else if direction == 'B' {
+                minX = minX + ExtraMath.ceil((maxX - minX) / 2.0)
+            }
+            else if direction == 'L' {
+                maxY = maxY - ExtraMath.ceil((maxY - minY) / 2.0)
+            }
+            else if direction == 'R' {
+                minY = minY + ExtraMath.ceil((maxY - minY) / 2.0)
+            }
+
+            // log minX + '-' + maxX, minY + '-' + maxY
+        }
+
+        Int id = maxX * 8 + maxY
+        ids.add(id)
+        max = Math.max(max, id)
+    }
+
+    log 'Part one: ' + max
+
+    for (mut Int seat = 1; seat < (seats - 2); seat++) {
+        // Bug detected - Negation wraps all further expressions and inverts them
+        // ~ https://github.com/panda-lang/panda/issues/593
+        if ids.contains(seat) && (!ids.contains(seat + 1)) && ids.contains(seat + 2) {
+            log 'Part two: ' + (seat + 1)
+            break
+        }
+    }
+}
+
+type ExtraMath {
+
+    open static ceil (Double value) -> Int {
+        return (Math.ceil(value) as Double).intValue()
+    }
+
+}

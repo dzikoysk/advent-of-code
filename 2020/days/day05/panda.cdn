@@ -1,7 +1,7 @@
-name: day04
+name: day05
 version: 2020
 owner: dzikoysk
 
 scripts: {
-    main: day04.panda
+    main: day05.panda
 }
