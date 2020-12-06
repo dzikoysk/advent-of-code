@@ -24,7 +24,8 @@ cd <year>
 | 03 | [Toboggan Trajectory](https://adventofcode.com/2020/day/3) | ✓ |
 | 04 | [Passport Processing](https://adventofcode.com/2020/day/4) | ✓ |
 | 05 | [Binary Boarding](https://adventofcode.com/2020/day/5) | ✓ |
-| 06 | ... | ... |
+| 06 | [Custom Customs](https://adventofcode.com/2020/day/6) | ✓ |
+| 07 | ... | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |
@@ -37,3 +38,4 @@ cd <year>
 | 09 | [Sensor Boost](https://adventofcode.com/2019/day/9) | ✓ |
 | 10 | [Monitoring Station](https://adventofcode.com/2019/day/10) | ½ |
 | 11 | [Space Police](https://adventofcode.com/2019/day/11) | - |
+| ... | Lack of time :< | ... |

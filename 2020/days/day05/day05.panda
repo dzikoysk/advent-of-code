@@ -1,4 +1,4 @@
-module day04
+module day05
 
 require java:collections
 

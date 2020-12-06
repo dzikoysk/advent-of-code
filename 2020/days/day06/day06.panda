@@ -1,0 +1,44 @@
+module day06
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import java.lang.Math
+
+main {
+    // Requires file in CRLF format
+    String lineSeparator = System.lineSeparator()
+    String[] groups = FileUtils.getContentOfFile(new File(System.getProperty("input"))).split(lineSeparator + lineSeparator)
+
+    mut Int sum = 0
+    mut Int unanimousSum = 0
+
+    foreach (String group : groups) {
+        HashMap answers = new HashMap()
+        Int groupSize = group.split(lineSeparator).size()
+
+        foreach (Char question : group.replace(lineSeparator, '').trim().toCharArray()) {
+            mut nil Int cachedAnswer = answers.get(question)
+
+            if cachedAnswer == null {
+                cachedAnswer = 0
+            }
+
+            cachedAnswer++
+            answers.put(question, cachedAnswer)
+        }
+
+        sum = sum + answers.size()
+
+        foreach (Int cachedAnswer : answers.values()) {
+            if cachedAnswer == groupSize {
+                unanimousSum++
+            }
+        }
+    }
+
+    log 'Part one: ' + sum          // 6504
+    log 'Part two: ' + unanimousSum // 3351
+}
