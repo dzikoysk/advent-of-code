@@ -6,8 +6,6 @@ import java.io.File
 import java.nio.file.Files
 import org.panda_lang.utilities.commons.FileUtils
 import org.panda_lang.utilities.commons.StringUtils
-import java.lang.Math
-import java.util.Arrays
 
 main {
     List rules = Files.readAllLines(new File(System.getProperty("input")).toPath())
