@@ -1,0 +1,57 @@
+module day07
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
+import java.lang.Math
+import java.util.Arrays
+
+main {
+    List rules = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    Map relations = new HashMap()
+
+    foreach (String rule : rules) {
+        String[] entry = rule.replace('bags', 'bag').replace(' bag', '').replace('.', '').split(' contain ')
+        relations.put(entry[0].trim(), entry[1].trim())
+    }
+
+    log 'Part one: ' + BagsFinder.findIn(relations, new HashSet(), 'shiny gold').size() // 226
+    log 'Part two: ' + BagsFinder.countContent(relations, 'shiny gold') // 9569
+}
+
+type BagsFinder {
+
+    open static findIn (Map relations, HashSet result, String bag) -> HashSet {
+        foreach (Entry entry : relations.entrySet()) {
+            if (entry.getValue().toString().contains(bag)) {
+                result.add(entry.getKey())
+                findIn(relations, result, entry.getKey() as String)
+            }
+        }
+
+        return result
+    }
+
+    open static countContent (Map relations, String bag) -> Int {
+        String contentValue = relations.get(bag) as String
+
+        if contentValue.contains('no other') {
+            return 0
+        }
+
+        String[] content = contentValue.split(', ')
+        mut Int count = 0
+
+        foreach (String element : content) {
+            String[] record = StringUtils.splitFirst(element, ' ')
+            Int amount = Int.parseInt(record[0].trim())
+            count = count + amount + (amount * countContent(relations, record[1].trim()))
+        }
+
+        return count
+    }
+
+}

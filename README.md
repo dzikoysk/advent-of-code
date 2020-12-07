@@ -25,7 +25,8 @@ cd <year>
 | 04 | [Passport Processing](https://adventofcode.com/2020/day/4) | ✓ |
 | 05 | [Binary Boarding](https://adventofcode.com/2020/day/5) | ✓ |
 | 06 | [Custom Customs](https://adventofcode.com/2020/day/6) | ✓ |
-| 07 | ... | ... |
+| 07 | [Handy Haversacks](https://adventofcode.com/2020/day/7) | ✓ |
+| 08 | ... | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |

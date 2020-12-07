@@ -1,0 +1,7 @@
+name: day07
+version: 2020
+owner: dzikoysk
+
+scripts: {
+    main: day07.panda
+}
