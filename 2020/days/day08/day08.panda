@@ -12,8 +12,19 @@ main {
     List source = Files.readAllLines(new File(System.getProperty("input")).toPath())
     Program program = Parser.parse(source)
 
+    //
+    // Program returns
+    //   Pair<Stack, Accumulator> for corrupted code
+    //   Pair<Bool, Accumulator> for properly patched code
+    //
+
     mut Pair result = program.run()
     log 'Part one: ' + result.getValue() // 2058
+
+    //
+    // Patch code in iterations based on root stack.
+    // Properly executed program should return Bool instead of Stack
+    //
 
     mut Int iteration = 0
     mut Pair fixedResult = result
