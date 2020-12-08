@@ -1,0 +1,145 @@
+module day08
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
+import org.panda_lang.utilities.commons.collection.Pair
+
+main {
+    List source = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    Program program = Parser.parse(source)
+
+    mut Pair result = program.run()
+    log 'Part one: ' + result.getValue() // 2058
+
+    mut Int iteration = 0
+    mut Pair fixedResult = result
+
+    while fixedResult.getKey() is Stack {
+        Program fixedProgram = program.patch(result.getKey() as Stack, iteration)
+        fixedResult = fixedProgram.run()
+        iteration++
+    }
+
+    // Bug detected: Math operation can remain as a standalone expression
+    // ~ https://github.com/panda-lang/panda/issues/596
+    log 'Part two: ' + fixedResult.getValue() + ' (found in ' + iteration + 'th iteration)' // 1000 (found in 54th iteration)
+}
+
+
+type Instruction {
+
+    open String name
+    open Int value
+
+    constructor (String name, Int value) {
+        this.name = name
+        this.value = value
+    }
+
+    override toString () -> String {
+        return name + ' ' + value
+    }
+
+}
+
+type Parser {
+
+    open static parse (List source) -> Program {
+        List code = new ArrayList(source.size())
+
+        foreach (String instruction : source) {
+            Int separator = instruction.indexOf(' ')
+            String name = instruction.substring(0, separator)
+            Int value = Int.parseInt(instruction.substring(separator + 1))
+            code.add(new Instruction(name, value))
+        }
+
+        return new Program(code)
+    }
+
+}
+
+type Program {
+
+    internal List code
+
+    constructor (List code) {
+        this.code = code
+    }
+
+    open run () -> Pair {
+        Stack stack = new Stack()
+        mut Int accumulator = 0
+
+        for (mut Int position = 0; position < code.size();) {
+            Instruction instruction = code.get(position) as Instruction
+            // log instruction.name + ' ' + instruction.value + ' at ' + position
+
+            if stack.contains(position) {
+                return new Pair(stack, accumulator)
+            }
+
+            stack.push(position)
+
+            if 'acc' == instruction.name {
+                accumulator = accumulator + instruction.value
+                position++
+                continue
+            }
+
+            if 'jmp' == instruction.name {
+                position = position + instruction.value
+                continue
+            }
+
+            if 'nop' == instruction.name {
+                position++
+                continue
+            }
+
+            throw new RuntimeException('Invalid code ' + instruction.name)
+        }
+
+        // Looks like bug - cannot provide primitives as parameters in generated constructors
+        // Cannot pass primitive values as arguments for panda::Object parameters
+        // ~ https://github.com/panda-lang/panda/issues/597
+        return new Pair(true as Bool, accumulator)
+    }
+
+    open patch (Stack corrupted, Int iteration) -> Program {
+        List copiedCode = new ArrayList(code)
+        mut Int step = 0
+
+        for (mut Int position = corrupted.size() - 1; position > -1; position--) {
+            Int instructionPosition = corrupted.get(position) as Int
+            Instruction instruction = copiedCode.get(instructionPosition) as Instruction
+
+            if 'acc' == instruction.name {
+                continue
+            }
+
+            if step++ < iteration {
+                continue
+            }
+
+            if 'nop' == instruction.name {
+                copiedCode.set(instructionPosition, new Instruction('jmp', instruction.value))
+                // log 'Changed ' + instruction + ' to ' + copiedCode.get(instructionPosition) + ' at ' + instructionPosition
+                break
+            }
+
+            if 'jmp' == instruction.name {
+                copiedCode.set(instructionPosition, new Instruction('nop', instruction.value))
+                // log 'Changed ' + instruction + ' to ' + copiedCode.get(instructionPosition) + ' at ' + instructionPosition
+                break
+            }
+        }
+
+        return new Program(copiedCode)
+    }
+
+}
