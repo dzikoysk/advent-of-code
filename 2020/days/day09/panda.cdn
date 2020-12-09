@@ -1,0 +1,7 @@
+name: day09
+version: 2020
+owner: dzikoysk
+
+scripts: {
+    main: day09.panda
+}

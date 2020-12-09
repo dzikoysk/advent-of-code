@@ -27,7 +27,8 @@ cd <year>
 | 06 | [Custom Customs](https://adventofcode.com/2020/day/6) | ✓ |
 | 07 | [Handy Haversacks](https://adventofcode.com/2020/day/7) | ✓ |
 | 08 | [Handheld Halting](https://adventofcode.com/2020/day/8) | ✓ |
-| 09 | ... | ... |
+| 09 | [Encoding Error](https://adventofcode.com/2020/day/9) | ✓ |
+| 10 | ... | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |

@@ -1,0 +1,94 @@
+module day09
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
+import org.panda_lang.utilities.commons.collection.Pair
+import org.panda_lang.utilities.commons.function.Result
+import java.lang.Math
+
+main {
+    List source = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    for (mut Int index = 0; index < source.size(); index++) {
+        source.set(index, Long.parseLong(source.get(index) as String) as Long)
+    }
+
+    XmasDecoder decoder = new XmasDecoder(source)
+
+    while decoder.hasNext() {
+        Result result = decoder.decodeNext()
+
+        if result.isErr() {
+            Int weaknessPosition = result.getError() as Int
+            log 'Part one: ' + source.get(weaknessPosition) // 21806024
+            log 'Part two: ' + decoder.detectWeakness(weaknessPosition) // 2986195
+            break
+        }
+    }
+}
+
+type XmasDecoder {
+
+    open static Int XMAS_PREAMBLE_OFFSET = 25
+
+    internal List data
+    internal mut Int index = XMAS_PREAMBLE_OFFSET
+
+    constructor (List data) {
+        this.data = data
+    }
+
+    open hasNext () -> Bool {
+        return index < data.size()
+    }
+
+    open decodeNext () -> Result {
+        List preamble = data.subList(index - XMAS_PREAMBLE_OFFSET, index)
+        Long current = data.get(index++ as Int) as Long
+
+        foreach (Long factor : preamble) {
+            if preamble.contains(current - factor) {
+                return Result.ok(current)
+            }
+        }
+
+        return Result.error(index - 1)
+    }
+
+    open detectWeakness (Int weaknessPosition) -> Int {
+        List weakness = data.subList(0, weaknessPosition - 1)
+        Long target = data.get(weaknessPosition) as Long
+
+        for (mut Int subsetSize = weakness.size() - 1; subsetSize > 2; subsetSize--) {
+            for (mut Int index = 0; index < (weakness.size() - subsetSize); index++) {
+                List subset = weakness.subList(index, index + subsetSize)
+                mut Long sum = 0
+
+                foreach (Long factor : subset) {
+                    sum = sum + factor
+                }
+
+                if sum != target {
+                    continue
+                }
+
+                mut Long max = -1
+                mut Long min = Long.MAX_VALUE
+
+                foreach (Long factor : subset) {
+                    max = Math.max(max, factor)
+                    min = Math.min(min, factor)
+                }
+
+                return max + min
+            }
+        }
+
+        return -1
+    }
+
+}
