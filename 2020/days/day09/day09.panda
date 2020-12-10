@@ -64,7 +64,9 @@ type XmasDecoder {
         Long target = data.get(weaknessPosition) as Long
 
         for (mut Int subsetSize = weakness.size() - 1; subsetSize > 2; subsetSize--) {
-            for (mut Int index = 0; index < (weakness.size() - subsetSize); index++) {
+            Int range = weakness.size() - subsetSize
+
+            for (mut Int index = 0; index < range; index++) {
                 List subset = weakness.subList(index, index + subsetSize)
                 mut Long sum = 0
 

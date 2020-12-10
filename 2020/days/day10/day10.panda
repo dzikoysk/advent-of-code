@@ -1,0 +1,50 @@
+module day10
+
+require java:collections
+
+import java.io.File
+import java.nio.file.Files
+import org.panda_lang.utilities.commons.FileUtils
+import org.panda_lang.utilities.commons.StringUtils
+import org.panda_lang.utilities.commons.collection.Pair
+import org.panda_lang.utilities.commons.function.Result
+import java.lang.Math
+
+main {
+    List source = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    for (mut Int index = 0; index < source.size(); index++) {
+        source.set(index, Int.parseInt(source.get(index).toString()) as Int)
+    }
+
+    mut Int rating = 0
+    mut Int oneDiff = 0
+    mut Int twoDiff = 0
+    mut Int threeDiff = 0
+
+    while true {
+        if source.indexOf(++rating) != -1 {
+            oneDiff++
+            // log 'A', rating, oneDiff
+            continue
+        }
+
+        if source.indexOf(++rating) != -1 {
+            twoDiff++
+            // log 'B', rating, twoDiff
+            continue
+        }
+
+        if source.indexOf(++rating) != -1 {
+            threeDiff++
+            // log 'C', rating, threeDiff
+            continue
+        }
+
+        threeDiff++
+        break
+    }
+
+    // log rating, oneDiff, twoDiff, threeDiff
+    log 'Part one: ' + (oneDiff * threeDiff)
+}
