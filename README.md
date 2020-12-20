@@ -28,7 +28,9 @@ cd <year>
 | 07 | [Handy Haversacks](https://adventofcode.com/2020/day/7) | ✓ |
 | 08 | [Handheld Halting](https://adventofcode.com/2020/day/8) | ✓ |
 | 09 | [Encoding Error](https://adventofcode.com/2020/day/9) | ✓ |
-| 10 | ... | ... |
+| 10 | [Adapter Array](https://adventofcode.com/2020/day/10) | ½ |
+| 11| [Seating System](https://adventofcode.com/2020/day/11) | - |
+| ... | Again lack of time 😳 | ... |
 | - | Advent of Code 2019 | - |
 | 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
 | 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |
