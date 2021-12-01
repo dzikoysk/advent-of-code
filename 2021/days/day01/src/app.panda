@@ -1,0 +1,6 @@
+// import java collections from std
+require 'java' { collections }
+
+main {
+    log 'Hello Panda'
+}

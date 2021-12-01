@@ -1,5 +1,5 @@
 # Advent of Code
-[Advent of Code 2019 and 2020](https://adventofcode.com/) in [Panda](https://github.com/panda-lang/panda)
+[Advent of Code 2019-2021](https://adventofcode.com/) in [Panda](https://github.com/panda-lang/panda)
 
 ### Background
 The aim of project is to explore the pre-alpha version of [Panda](https://github.com/panda-lang/panda) language.
@@ -18,6 +18,8 @@ cd <year>
 
 | Day | Name | Panda | 
 |:---:|:---|:---:|
+| - | Advent of Code 2021 | - |
+| 01 | [Waiting....](https://adventofcode.com/2021/day/1) |  |
 | - | Advent of Code 2020 | - |
 | 01 | [Report Repair](https://adventofcode.com/2020/day/1) | ✓ |
 | 02 | [Password Philosophy](https://adventofcode.com/2020/day/2) | ✓ |
