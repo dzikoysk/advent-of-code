@@ -17,7 +17,7 @@ main {
 
         queue.add(measurement)
 
-        if (queue.size() == 4L) {
+        if (queue.size() == 4) {
             let previous = queue.get(0) as Int + queue.get(1) as Int + queue.get(2) as Int
             let current = queue.get(1) as Int + queue.get(2) as Int + queue.get(3) as Int
             queue.poll()

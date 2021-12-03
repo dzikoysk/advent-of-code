@@ -1,0 +1,37 @@
+require 'java' { collections }
+
+import java.io.File
+import java.nio.file.Files
+import java.util.Arrays
+import panda.utilities.ArrayUtils
+
+main {
+    List<String> lines = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    mut let horizontalPosition = 0
+    mut let depth = 0
+    mut let aim = 0
+    mut let depthAim = 0
+
+    foreach (String line : lines) {
+        let entry = line.split(" ")
+        let direction = entry.get(0)
+        let measurement = Int.parseInt(entry.get(1))
+
+        if (direction == 'forward') {
+            horizontalPosition = horizontalPosition + measurement
+            depthAim = depthAim + aim * measurement
+        }
+        else if (direction == 'down') {
+            depth = depth + measurement
+            aim = aim + measurement
+        }
+        else if (direction == 'up') {
+            depth = depth - measurement
+            aim = aim - measurement
+        }
+    }
+
+    log 'Part 1: Horizontal position x depth is ' + horizontalPosition * depth // 1936494
+    log 'Part 1: Horizontal position x depth (aim) is ' + horizontalPosition * depthAim // 1997106066
+}
