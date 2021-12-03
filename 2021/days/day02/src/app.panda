@@ -2,8 +2,6 @@ require 'java' { collections }
 
 import java.io.File
 import java.nio.file.Files
-import java.util.Arrays
-import panda.utilities.ArrayUtils
 
 main {
     mut let horizontalPosition = 0
