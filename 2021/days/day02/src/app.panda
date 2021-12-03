@@ -6,14 +6,12 @@ import java.util.Arrays
 import panda.utilities.ArrayUtils
 
 main {
-    List<String> lines = Files.readAllLines(new File(System.getProperty("input")).toPath())
-
     mut let horizontalPosition = 0
     mut let depth = 0
     mut let aim = 0
     mut let depthAim = 0
 
-    foreach (String line : lines) {
+    foreach (String line : Files.readAllLines(new File(System.getProperty("input")).toPath())) {
         let entry = line.split(" ")
         let direction = entry.get(0)
         let measurement = Int.parseInt(entry.get(1))
