@@ -1,0 +1,86 @@
+require 'java' { collections }
+
+import java.io.File
+import java.nio.file.Files
+
+main {
+    List<String> lines = Files.readAllLines(new File(System.getProperty("input")).toPath())
+    let length = (lines.get(0) as String).length()
+
+    log 'Part 1: The power consumption of the submarine is ' + PowerConsumption.findPowerConsumption(lines, length) // 2595824
+    log 'Part 2: The life support rating of the submarine is ' + LifeSupportRating.findLifeSupportRating(lines, length) // 2135254
+}
+
+/* Imagine having streams and fully working type system >.< */
+
+shared type PowerConsumption {
+
+    shared static findPowerConsumption(List<String> lines, Int length) -> Int {
+        let zeroBitsCount = new ArrayList<Int>()
+        mut let gammaRate = 0L
+        mut let epsilonRate = 0L
+
+        foreach (String line : lines) {
+            for (mut let index = 0; index < line.length(); index++) {
+                if (index >= zeroBitsCount.size()) {
+                    zeroBitsCount.add(0)
+                }
+                if (line.charAt(index).toString() == "0") {
+                    zeroBitsCount.set(index, zeroBitsCount.get(index) as Int + 1)
+                }
+            }
+        }
+
+        for (mut let index = 0; index < length; index++) {
+            if ((lines.size() - zeroBitsCount.get(index) as Int) > (lines.size() / 2)) {
+                gammaRate = gammaRate ^ (1 << (length - index - 1))
+            } else {
+                epsilonRate = epsilonRate ^ (1 << (length - index - 1))
+            }
+        }
+
+        return gammaRate * epsilonRate
+    }
+
+}
+
+shared type LifeSupportRating {
+
+    shared static findLifeSupportRating(List<String> lines, Int length) -> Int {
+        return LifeSupportRating.findRating(new ArrayList<String>(lines), length, true) * LifeSupportRating.findRating(new ArrayList<String>(lines), length, false)
+    }
+
+    internal static findRating(List<String> lines, Int length, Bool most) -> Int {
+         for (mut let index = 0; index < length; index++) {
+            if (lines.size() as Int == 1) {
+                break;
+            }
+
+            mut let zero = 0
+
+            if ((index + 1) < length) {
+                foreach (String record : lines) {
+                    if (record.charAt(index).toString() == '0') {
+                        zero++
+                    }
+                }
+            }
+
+            let mostZeros = zero > (lines.size() / 2.0)
+            Iterator<String> iterator = lines.iterator()
+
+            while (iterator.hasNext()) {
+                String element = (iterator.next() as String).charAt(index).toString()
+                if (element == '0' && ((most && !mostZeros) || (!most && mostZeros))) {
+                    iterator.remove()
+                }
+                else if (element == '1' && ((most && mostZeros) || (!most && !mostZeros))) {
+                    iterator.remove()
+                }
+            }
+        }
+
+        return Int.parseInt(lines.get(0) as String, 2)
+    }
+
+}
