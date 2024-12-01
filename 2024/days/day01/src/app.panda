@@ -1,0 +1,55 @@
+require 'java' { collections }
+
+import java.io.File
+import java.nio.file.Files
+import java.lang.Math
+
+main {
+    List<String> input = Files.readAllLines(new File(System.getProperty("input")).toPath())
+
+    let left = new ArrayList()
+    let right = new ArrayList()
+
+    foreach (String line : input) {
+        let values = line.split('   ')
+
+        let leftValue = Int.parseInt(values.get(0))
+        left.add(leftValue)
+
+        let rightValue = Int.parseInt(values.get(1))
+        right.add(rightValue)
+    }
+
+    // -- Part 1
+
+    Collections.sort(left)
+    Collections.sort(right)
+
+    mut Int totalDifference = 0
+
+    for (mut Int index = 0; index < input.size(); index++) {
+        Int leftValue = left.get(index) as Int
+        Int rightValue = right.get(index) as Int
+        totalDifference = totalDifference + Math.abs(leftValue - rightValue) as Int
+    }
+
+    log 'Part 1: Distance ' + totalDifference // 2742123
+
+    // -- Part 2
+
+    mut Int similarityScore = 0
+
+    foreach (Int value : left as List<Int>) {
+        mut let count = 0
+
+        foreach (Int occurrence : right as List<Int>) {
+            if (value == occurrence) {
+                count++
+            }
+        }
+
+        similarityScore = similarityScore + (value * count)
+    }
+
+    log 'Part 2: Similarity ' + similarityScore // 2742123
+}

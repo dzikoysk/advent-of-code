@@ -16,36 +16,43 @@ cd <year>
 ### Progress
 
 
-| Day | Name | Panda | 
-|:---:|:---|:---:|
-| - | Advent of Code 2021 | - |
-| 01 | [Sonar Sweep](https://adventofcode.com/2021/day/1) | ✓ |
-| 02 | [Dive!](https://adventofcode.com/2021/day/2) | ✓ |
-| 03 | [Binary Diagnostic](https://adventofcode.com/2021/day/3) | ✓ |
-| 0N |  |  |
-| - | Advent of Code 2020 | - |
-| 01 | [Report Repair](https://adventofcode.com/2020/day/1) | ✓ |
-| 02 | [Password Philosophy](https://adventofcode.com/2020/day/2) | ✓ |
-| 03 | [Toboggan Trajectory](https://adventofcode.com/2020/day/3) | ✓ |
-| 04 | [Passport Processing](https://adventofcode.com/2020/day/4) | ✓ |
-| 05 | [Binary Boarding](https://adventofcode.com/2020/day/5) | ✓ |
-| 06 | [Custom Customs](https://adventofcode.com/2020/day/6) | ✓ |
-| 07 | [Handy Haversacks](https://adventofcode.com/2020/day/7) | ✓ |
-| 08 | [Handheld Halting](https://adventofcode.com/2020/day/8) | ✓ |
-| 09 | [Encoding Error](https://adventofcode.com/2020/day/9) | ✓ |
-| 10 | [Adapter Array](https://adventofcode.com/2020/day/10) | ½ |
-| 11| [Seating System](https://adventofcode.com/2020/day/11) | - |
-| ... | Again lack of time 😳 | ... |
-| - | Advent of Code 2019 | - |
-| 01 | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) | ✓ |
-| 02 | [1202 Program Alarm](https://adventofcode.com/2019/day/2) | ✓ |
-| 03 | [Crossed Wires](https://adventofcode.com/2019/day/3) | ✓ |
-| 04 | [Secure Container](https://adventofcode.com/2019/day/4) | ✓ |
-| 05 | [Sunny with a Chance of Asteroids](https://adventofcode.com/2019/day/5) | ✓ |
-| 06 | [Universal Orbit Map](https://adventofcode.com/2019/day/6) | ✓ |
-| 07 | [Amplification Circuit](https://adventofcode.com/2019/day/7) | ✓ |
-| 08 | [Space Image Format](https://adventofcode.com/2019/day/8) | ✓ |
-| 09 | [Sensor Boost](https://adventofcode.com/2019/day/9) | ✓ |
-| 10 | [Monitoring Station](https://adventofcode.com/2019/day/10) | ½ |
-| 11 | [Space Police](https://adventofcode.com/2019/day/11) | - |
-| ... | Lack of time :< | ... |
+| Day | Name                                                                      | Panda | 
+|:---:|:--------------------------------------------------------------------------|:-----:|
+|  -  | Advent of Code 2024                                                       |   -   |
+| 01  | [Historian Hysteria](https://adventofcode.com/2024/day/1)                 |   ✓   |
+| 02  |                                                                           |       |
+|  -  | Advent of Code 2023                                                       |   -   |
+| ... | Skipped                                                                   |  ...  |
+|  -  | Advent of Code 2022                                                       |   -   |
+| ... | Skipped                                                                   |  ...  |
+|  -  | Advent of Code 2021                                                       |   -   |
+| 01  | [Sonar Sweep](https://adventofcode.com/2021/day/1)                        |   ✓   |
+| 02  | [Dive!](https://adventofcode.com/2021/day/2)                              |   ✓   |
+| 03  | [Binary Diagnostic](https://adventofcode.com/2021/day/3)                  |   ✓   |
+| ... | Nope                                                                      |  ...  |
+|  -  | Advent of Code 2020                                                       |   -   |
+| 01  | [Report Repair](https://adventofcode.com/2020/day/1)                      |   ✓   |
+| 02  | [Password Philosophy](https://adventofcode.com/2020/day/2)                |   ✓   |
+| 03  | [Toboggan Trajectory](https://adventofcode.com/2020/day/3)                |   ✓   |
+| 04  | [Passport Processing](https://adventofcode.com/2020/day/4)                |   ✓   |
+| 05  | [Binary Boarding](https://adventofcode.com/2020/day/5)                    |   ✓   |
+| 06  | [Custom Customs](https://adventofcode.com/2020/day/6)                     |   ✓   |
+| 07  | [Handy Haversacks](https://adventofcode.com/2020/day/7)                   |   ✓   |
+| 08  | [Handheld Halting](https://adventofcode.com/2020/day/8)                   |   ✓   |
+| 09  | [Encoding Error](https://adventofcode.com/2020/day/9)                     |   ✓   |
+| 10  | [Adapter Array](https://adventofcode.com/2020/day/10)                     |   ½   |
+| 11  | [Seating System](https://adventofcode.com/2020/day/11)                    |   -   |
+| ... | Again lack of time 😳                                                     |  ...  |
+|  -  | Advent of Code 2019                                                       |   -   |
+| 01  | [The Tyranny of the Rocket Equation](https://adventofcode.com/2019/day/1) |   ✓   |
+| 02  | [1202 Program Alarm](https://adventofcode.com/2019/day/2)                 |   ✓   |
+| 03  | [Crossed Wires](https://adventofcode.com/2019/day/3)                      |   ✓   |
+| 04  | [Secure Container](https://adventofcode.com/2019/day/4)                   |   ✓   |
+| 05  | [Sunny with a Chance of Asteroids](https://adventofcode.com/2019/day/5)   |   ✓   |
+| 06  | [Universal Orbit Map](https://adventofcode.com/2019/day/6)                |   ✓   |
+| 07  | [Amplification Circuit](https://adventofcode.com/2019/day/7)              |   ✓   |
+| 08  | [Space Image Format](https://adventofcode.com/2019/day/8)                 |   ✓   |
+| 09  | [Sensor Boost](https://adventofcode.com/2019/day/9)                       |   ✓   |
+| 10  | [Monitoring Station](https://adventofcode.com/2019/day/10)                |   ½   |
+| 11  | [Space Police](https://adventofcode.com/2019/day/11)                      |   -   |
+| ... | Lack of time :<                                                           |  ...  |
